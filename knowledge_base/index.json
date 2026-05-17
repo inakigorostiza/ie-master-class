@@ -1,0 +1,439 @@
+[
+  {
+    "slug": "strategic-marketing-communication",
+    "name": "Master in Strategic Marketing & Communication",
+    "url": "https://www.ie.edu/business-school/programs/masters/master-in-strategic-marketing-communication/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "executive-strategic-marketing-communication",
+    "name": "Executive Master in Strategic Marketing & Communication",
+    "url": "https://www.ie.edu/business-school/programs/masters/executive-master-in-strategic-marketing-communication/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "customer-experience-innovation",
+    "name": "Master in Customer Experience & Innovation",
+    "url": "https://www.ie.edu/business-school/programs/masters/master-in-customer-experience-innovation/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "digital-marketing",
+    "name": "Master in Digital Marketing",
+    "url": "https://www.ie.edu/business-school/programs/masters/master-in-digital-marketing/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "market-research-consumer-behavior",
+    "name": "Master in Market Research & Consumer Behavior",
+    "url": "https://www.ie.edu/business-school/programs/masters/master-in-market-research-consumer-behavior/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "creative-direction-content-branding",
+    "name": "Master in Creative Direction, Content & Branding",
+    "url": "https://www.ie.edu/business-school/programs/masters/master-in-creative-direction-content-branding/",
+    "category": "standalone",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-market-research-consumer-behavior",
+    "name": "IMBA + Market Research and Consumer Behavior",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-market-research-consumer-behavior/",
+    "category": "dual-imba-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-strategic-marketing-communication",
+    "name": "IMBA + Strategic Marketing & Communication",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-strategic-marketing-communication/",
+    "category": "dual-imba-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-creative-direction-content-branding",
+    "name": "IMBA + Creative Direction, Content & Branding",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-creative-direction-content-branding/",
+    "category": "dual-imba-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-customer-experience-innovation",
+    "name": "IMBA + Customer Experience and Innovation",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-customer-experience-innovation/",
+    "category": "dual-imba-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-digital-marketing",
+    "name": "IMBA + Digital Marketing",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-digital-marketing/",
+    "category": "dual-imba-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-mim-creative-direction-content-branding",
+    "name": "MiM + Creative Direction, Content & Branding",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-master-in-management-master-creative-direction-content-branding/",
+    "category": "dual-mim-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-mim-customer-experience-innovation",
+    "name": "MiM + Customer Experience and Innovation",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-master-in-management-master-customer-experience-innovation/",
+    "category": "dual-mim-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "admissions",
+      "career",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-mim-digital-marketing",
+    "name": "MiM + Digital Marketing",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-master-in-management-master-digital-marketing/",
+    "category": "dual-mim-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-mim-market-research-consumer-behavior",
+    "name": "MiM + Market Research and Consumer Behavior",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-master-in-management-master-market-research-consumer-behavior/",
+    "category": "dual-mim-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "fees_and_funding",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-mim-strategic-marketing-communication",
+    "name": "MiM + Strategic Marketing & Communication",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-master-in-management-master-strategic-marketing-communication/",
+    "category": "dual-mim-marketing",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-financial-technology",
+    "name": "IMBA + Financial Technology",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-financial-technology/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-business-analytics-data-science",
+    "name": "IMBA + Business Analytics and Data Science",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-business-analytics-data-science/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-computer-science-business-technology",
+    "name": "IMBA + Computer Science and Business Technology",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-computer-science-business-technology/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-digital-strategy-ai-innovation",
+    "name": "IMBA + Digital Strategy, AI & Innovation",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-digital-strategy-ai-innovation/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-finance",
+    "name": "IMBA + Finance",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-finance/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-real-estate-development",
+    "name": "IMBA + Real Estate Development",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-real-estate-development/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "admissions",
+      "career",
+      "contact"
+    ],
+    "notes": []
+  },
+  {
+    "slug": "dual-imba-in-public-policy",
+    "name": "IMBA + Public Policy",
+    "url": "https://www.ie.edu/masters/dual-degrees/programs/dual-degree-international-mba-master-in-public-policy/",
+    "category": "dual-imba-other",
+    "last_fetched": "2026-05-17T15:48:45Z",
+    "http_status": 200,
+    "status": "ok",
+    "sections_present": [
+      "overview",
+      "format",
+      "curriculum",
+      "admissions",
+      "career",
+      "faculty",
+      "contact"
+    ],
+    "notes": []
+  }
+]

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IE Business School — Master Programs</title>
+    <meta
+      name="description"
+      content="Explore IE Business School master programs and ask our AI admissions advisor anything about curriculum, format, careers, and dual degrees."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top" aria-label="IE Business School home">
+          <span class="brand-mark">IE</span>
+          <span class="brand-name">Business School</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#programs">Programs</a>
+          <a href="#about">About</a>
+          <button class="nav-cta" type="button" data-open-chat>Ask the advisor</button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container hero-inner">
+          <p class="eyebrow">AI admissions advisor</p>
+          <h1>Find your IE master program.</h1>
+          <p class="lede">
+            Explore 23 master programs from IE Business School — from Strategic Marketing &amp;
+            Communication to Customer Experience &amp; Innovation. Ask our AI advisor about
+            curriculum, format, fees, dual degrees, and career outcomes. Answers are grounded in
+            official program pages.
+          </p>
+          <div class="hero-cta">
+            <button class="btn btn-primary" type="button" data-open-chat>Chat with the advisor</button>
+            <a class="btn btn-ghost" href="#programs">Browse programs</a>
+          </div>
+          <ul class="hero-stats" aria-label="At a glance">
+            <li><strong>23</strong><span>master programs</span></li>
+            <li><strong>10–15</strong><span>months duration</span></li>
+            <li><strong>Madrid</strong><span>+ blended formats</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="programs" class="section">
+        <div class="container">
+          <header class="section-head">
+            <h2>Master programs</h2>
+            <p>
+              Tap <em>Ask about this program</em> on any card to launch the advisor with a tailored
+              prompt.
+            </p>
+          </header>
+
+          <div class="filters" role="tablist" aria-label="Filter programs by category">
+            <button class="chip is-active" type="button" data-filter="all" role="tab" aria-selected="true">All</button>
+            <button class="chip" type="button" data-filter="standalone" role="tab" aria-selected="false">Standalone</button>
+            <button class="chip" type="button" data-filter="dual" role="tab" aria-selected="false">Dual degrees</button>
+            <button class="chip" type="button" data-filter="executive" role="tab" aria-selected="false">Executive</button>
+          </div>
+
+          <div id="program-grid" class="program-grid" aria-live="polite">
+            <p class="grid-empty">Loading programs…</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section section-muted">
+        <div class="container about-inner">
+          <h2>How the advisor works</h2>
+          <p>
+            The chat assistant on this page is powered by Anthropic Claude. It is grounded in a
+            local knowledge base of official IE Business School program pages, so every answer is
+            tied to a real program. When information isn't in the knowledge base, the advisor will
+            tell you and point you to <a href="https://www.ie.edu" target="_blank" rel="noopener">ie.edu</a>.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>
+          This is a demo interface built on top of public IE Business School content. For official
+          admissions information, visit
+          <a href="https://www.ie.edu" target="_blank" rel="noopener">ie.edu</a>.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Chat widget -->
+    <div id="chat-widget" class="chat-widget" data-state="closed" aria-live="polite">
+      <button id="chat-toggle" class="chat-toggle" type="button" aria-label="Open chat">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"
+          />
+        </svg>
+        <span class="chat-toggle-label">Ask the advisor</span>
+      </button>
+
+      <section class="chat-panel" role="dialog" aria-label="IE admissions advisor" aria-modal="false">
+        <header class="chat-header">
+          <div class="chat-title">
+            <span class="chat-avatar" aria-hidden="true">IE</span>
+            <div>
+              <p class="chat-name">IE Admissions Advisor</p>
+              <p class="chat-status">AI · grounded in official program pages</p>
+            </div>
+          </div>
+          <button id="chat-close" class="chat-icon-btn" type="button" aria-label="Close chat">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M18.3 5.71 12 12.01l-6.3-6.3-1.4 1.41L10.59 13.4l-6.29 6.29 1.41 1.41L12 14.81l6.29 6.29 1.41-1.41-6.29-6.29 6.29-6.29z"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <ol id="chat-messages" class="chat-messages" aria-label="Conversation"></ol>
+
+        <div id="chat-suggestions" class="chat-suggestions" aria-label="Suggested questions">
+          <button type="button" data-suggestion="Which marketing master is best for someone with no work experience?">
+            Best master with no experience?
+          </button>
+          <button type="button" data-suggestion="What dual-degree options are available with the IMBA?">
+            Dual-degree options?
+          </button>
+          <button type="button" data-suggestion="Compare the Master in Digital Marketing and the Master in Customer Experience &amp; Innovation.">
+            Compare two programs
+          </button>
+        </div>
+
+        <form id="chat-form" class="chat-form" autocomplete="off">
+          <label for="chat-input" class="sr-only">Type your question</label>
+          <textarea
+            id="chat-input"
+            name="message"
+            rows="1"
+            placeholder="Ask about a program, format, careers…"
+            required
+          ></textarea>
+          <button id="chat-send" class="chat-send" type="submit" aria-label="Send message">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z" />
+            </svg>
+          </button>
+        </form>
+      </section>
+    </div>
+
+    <script src="app.js" defer></script>
+    <script src="chat.js" defer></script>
+  </body>
+</html>
