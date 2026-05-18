@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>IE Creative Studio · Admin</title>
+    <link rel="stylesheet" href="creatives.css" />
+  </head>
+  <body>
+    <header class="studio-header">
+      <div class="studio-wrap">
+        <h1>IE Creative Studio <span class="tag">internal</span></h1>
+        <div class="studio-auth">
+          <label for="studio-token">Admin token</label>
+          <input id="studio-token" type="password" autocomplete="off" placeholder="paste admin token" />
+          <button id="studio-refresh" type="button">Refresh</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="studio-main">
+      <section class="studio-toolbar">
+        <input id="studio-filter" type="search" placeholder="Filter by name, email, country…" />
+        <p id="studio-summary" class="studio-summary"></p>
+      </section>
+
+      <div id="studio-status" class="studio-status" role="status" aria-live="polite"></div>
+
+      <table id="studio-table" class="studio-table" hidden>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Student</th>
+            <th>Career goal</th>
+            <th>Style</th>
+            <th>Banner</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="studio-tbody"></tbody>
+      </table>
+    </main>
+
+    <dialog id="studio-modal" class="studio-modal">
+      <header>
+        <h2 id="studio-modal-title">Generation history</h2>
+        <button id="studio-modal-close" type="button" aria-label="Close">×</button>
+      </header>
+      <div id="studio-modal-body" class="studio-modal-body"></div>
+    </dialog>
+
+    <script src="creatives.js" defer></script>
+  </body>
+</html>

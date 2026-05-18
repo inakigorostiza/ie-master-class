@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 60,
+      "includeFiles": "knowledge_base/**"
+    },
+    "api/programs.js": {
+      "includeFiles": "knowledge_base/**"
+    },
+    "api/transcribe.js": {
+      "maxDuration": 30
+    },
+    "api/tts.js": {
+      "maxDuration": 30
+    },
+    "api/heygen.js": {
+      "maxDuration": 15
+    },
+    "api/stats.js": {
+      "maxDuration": 15
+    },
+    "api/elevenlabs-voices.js": {
+      "maxDuration": 15
+    },
+    "api/upload-photo.js": {
+      "maxDuration": 15
+    },
+    "api/personalize.js": {
+      "maxDuration": 15
+    },
+    "api/generate-creative.js": {
+      "maxDuration": 120,
+      "includeFiles": "styles/**"
+    },
+    "api/admin.js": {
+      "maxDuration": 15
+    },
+    "api/public-creatives.js": {
+      "maxDuration": 15
+    }
+  },
+  "rewrites": [
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/((?!api/).*)", "destination": "/public/$1" }
+  ]
+}

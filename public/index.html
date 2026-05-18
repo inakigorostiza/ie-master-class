@@ -14,8 +14,7 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="#top" aria-label="IE Business School home">
-          <span class="brand-mark">IE</span>
-          <span class="brand-name">Business School</span>
+          <img src="/img/ie-logo.svg" alt="IE Business School" class="brand-logo" width="160" height="32" />
         </a>
         <nav class="site-nav" aria-label="Primary">
           <a href="#programs">Programs</a>
@@ -29,7 +28,7 @@
       <section class="hero">
         <div class="container hero-inner">
           <p class="eyebrow">AI admissions advisor</p>
-          <h1>Find your IE master program.</h1>
+          <h1>Find your IE<br />master program.</h1>
           <p class="lede">
             Explore 23 master programs from IE Business School — from Strategic Marketing &amp;
             Communication to Customer Experience &amp; Innovation. Ask our AI advisor about
@@ -45,6 +44,206 @@
             <li><strong>10–15</strong><span>months duration</span></li>
             <li><strong>Madrid</strong><span>+ blended formats</span></li>
           </ul>
+        </div>
+      </section>
+
+      <section id="personalize" class="section section-muted">
+        <div class="container">
+          <header class="section-head">
+            <h2>Personalize your IE journey</h2>
+            <p class="section-lead">
+              Share a few details and we'll send tailored program recommendations plus
+              custom-made creatives — banners and reels designed around you.
+            </p>
+          </header>
+
+          <form id="personalize-form" class="personalize-form" novalidate>
+            <fieldset class="personalize-fieldset">
+              <legend>About you</legend>
+              <div class="personalize-grid">
+                <label class="personalize-photo">
+                  <span class="personalize-photo-preview" id="personalize-photo-preview" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true">
+                      <path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z" />
+                    </svg>
+                  </span>
+                  <span class="personalize-photo-cta">
+                    <span class="personalize-photo-label">Profile picture</span>
+                    <span class="personalize-photo-hint">JPG, PNG, WebP · up to 25 MB</span>
+                  </span>
+                  <input type="file" id="personalize-photo-input" name="photo" accept="image/*" hidden />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Full name *</span>
+                  <input type="text" name="full_name" autocomplete="name" required />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Email *</span>
+                  <input type="email" name="email" autocomplete="email" required />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Phone number</span>
+                  <input type="tel" name="phone_number" autocomplete="tel" placeholder="+34 600 000 000" inputmode="tel" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Country *</span>
+                  <select name="country" required>
+                    <option value="">Select…</option>
+                    <option>Spain</option><option>Portugal</option><option>France</option>
+                    <option>Germany</option><option>United Kingdom</option><option>Italy</option>
+                    <option>Netherlands</option><option>United States</option><option>Canada</option>
+                    <option>Mexico</option><option>Brazil</option><option>Argentina</option>
+                    <option>Chile</option><option>Colombia</option><option>India</option>
+                    <option>China</option><option>Japan</option><option>Singapore</option>
+                    <option>UAE</option><option>Australia</option><option>Other</option>
+                  </select>
+                </label>
+
+                <label class="personalize-field">
+                  <span>City</span>
+                  <input type="text" name="city" autocomplete="address-level2" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Date of birth</span>
+                  <input type="date" name="date_of_birth" />
+                </label>
+
+                <fieldset class="personalize-radio-group">
+                  <legend>Preferred language</legend>
+                  <label><input type="radio" name="preferred_language" value="EN" checked /> English</label>
+                  <label><input type="radio" name="preferred_language" value="ES" /> Español</label>
+                </fieldset>
+              </div>
+            </fieldset>
+
+            <fieldset class="personalize-fieldset">
+              <legend>Academic &amp; professional</legend>
+              <div class="personalize-grid">
+                <label class="personalize-field">
+                  <span>Current role</span>
+                  <input type="text" name="current_role" autocomplete="organization-title" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Current company</span>
+                  <input type="text" name="current_company" autocomplete="organization" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Years of experience</span>
+                  <input type="number" name="years_experience" min="0" max="40" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Undergraduate field</span>
+                  <select name="undergrad_field">
+                    <option value="">Select…</option>
+                    <option>Engineering</option><option>Business</option><option>Arts &amp; Humanities</option>
+                    <option>Sciences</option><option>Law</option><option>Medicine &amp; Health</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+
+                <label class="personalize-field personalize-field-wide">
+                  <span>Top IE program of interest</span>
+                  <select id="personalize-program" name="top_program_interest">
+                    <option value="">Loading…</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="personalize-fieldset">
+              <legend>Tell us how you see yourself</legend>
+              <div class="personalize-grid">
+                <label class="personalize-field personalize-field-wide">
+                  <span>Your career goal in one line</span>
+                  <input type="text" name="career_goal_one_line" maxlength="120" placeholder="e.g. Lead product at a top-tier consultancy" />
+                </label>
+
+                <label class="personalize-field personalize-field-wide">
+                  <span>Dream company or industry</span>
+                  <input type="text" name="dream_company_or_industry" placeholder="e.g. fintech, McKinsey, Patagonia" />
+                </label>
+
+                <fieldset class="personalize-radio-group personalize-field-wide">
+                  <legend>Visual vibe</legend>
+                  <label><input type="radio" name="visual_vibe" value="Bold" /> Bold</label>
+                  <label><input type="radio" name="visual_vibe" value="Minimal" /> Minimal</label>
+                  <label><input type="radio" name="visual_vibe" value="Editorial" /> Editorial</label>
+                  <label><input type="radio" name="visual_vibe" value="Corporate" /> Corporate</label>
+                </fieldset>
+
+                <fieldset class="personalize-radio-group personalize-field-wide">
+                  <legend>Tone</legend>
+                  <label><input type="radio" name="tone_preference" value="Inspirational" /> Inspirational</label>
+                  <label><input type="radio" name="tone_preference" value="Professional" /> Professional</label>
+                  <label><input type="radio" name="tone_preference" value="Conversational" /> Conversational</label>
+                  <label><input type="radio" name="tone_preference" value="Witty" /> Witty</label>
+                </fieldset>
+
+                <div class="personalize-field personalize-field-wide">
+                  <span>Three words that describe you</span>
+                  <div class="personalize-three-words">
+                    <input type="text" name="three_words_1" maxlength="20" placeholder="e.g. curious" />
+                    <input type="text" name="three_words_2" maxlength="20" placeholder="e.g. bilingual" />
+                    <input type="text" name="three_words_3" maxlength="20" placeholder="e.g. ambitious" />
+                  </div>
+                </div>
+
+                <label class="personalize-field">
+                  <span>LinkedIn URL (optional)</span>
+                  <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/…" />
+                </label>
+
+                <label class="personalize-field">
+                  <span>Instagram handle (optional)</span>
+                  <input type="text" name="instagram_handle" placeholder="@yourhandle" />
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="personalize-fieldset">
+              <legend>How can we reach you</legend>
+              <div class="personalize-grid">
+                <label class="personalize-field">
+                  <span>How did you hear about IE?</span>
+                  <select name="referral_source">
+                    <option value="">Select…</option>
+                    <option>Search</option><option>Social media</option><option>Friend or family</option>
+                    <option>Event or fair</option><option>Press / article</option><option>Other</option>
+                  </select>
+                </label>
+
+                <fieldset class="personalize-radio-group personalize-field-wide">
+                  <legend>Preferred contact channel</legend>
+                  <label><input type="radio" name="contact_channel_preference" value="Email" checked /> Email</label>
+                  <label><input type="radio" name="contact_channel_preference" value="WhatsApp" /> WhatsApp</label>
+                  <label><input type="radio" name="contact_channel_preference" value="Instagram DM" /> Instagram DM</label>
+                </fieldset>
+
+                <label class="personalize-consent personalize-field-wide">
+                  <input type="checkbox" id="personalize-gdpr" name="gdpr_consent" required />
+                  <span>
+                    I agree that IE Business School may contact me with tailored guidance,
+                    program recommendations, and personalized creatives. I can opt out anytime.
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="personalize-actions">
+              <button id="personalize-submit" class="btn btn-primary" type="submit" disabled>
+                Send me my recommendations
+              </button>
+              <p id="personalize-status" class="personalize-status" aria-live="polite"></p>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -80,6 +279,91 @@
             tied to a real program. When information isn't in the knowledge base, the advisor will
             tell you and point you to <a href="https://www.ie.edu" target="_blank" rel="noopener">ie.edu</a>.
           </p>
+        </div>
+      </section>
+
+      <section id="gallery" class="section">
+        <div class="container">
+          <header class="section-head">
+            <h2>Designed for you</h2>
+            <p class="section-lead">
+              A glimpse of the personalized banners our AI generates for prospective IE students.
+              Each one is composed live from a real student profile.
+            </p>
+          </header>
+          <div id="gallery-grid" class="gallery-grid" aria-live="polite">
+            <p class="gallery-loading">Loading creatives…</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="reels" class="section section-muted">
+        <div class="container">
+          <header class="section-head">
+            <h2>Reels designed for you</h2>
+            <p class="section-lead">
+              8-second hyper-personalized Instagram reels — voiceover, motion, and an
+              on-screen call to action, all generated from a single student profile.
+            </p>
+          </header>
+          <div id="reels-grid" class="reels-grid" aria-live="polite">
+            <p class="gallery-loading">Loading reels…</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="stats" class="section">
+        <div class="container">
+          <header class="section-head">
+            <h2>Stats</h2>
+            <p class="section-lead">
+              Live telemetry — how many AI calls this demo has made, what each
+              provider has cost in real euros, and which models pull the most weight.
+              Rolling window; data starts when usage logging shipped.
+            </p>
+            <div class="stats-window-tabs" role="tablist" aria-label="Time window">
+              <button data-window="24h" type="button">24h</button>
+              <button data-window="7d"  type="button">7 days</button>
+              <button data-window="30d" type="button" aria-selected="true">30 days</button>
+              <button data-window="all" type="button">All time</button>
+            </div>
+          </header>
+          <div id="stats-kpi" class="stats-kpi" aria-live="polite"></div>
+          <div class="stats-charts">
+            <figure class="stats-card">
+              <figcaption>Cost share by provider</figcaption>
+              <div class="stats-canvas-wrap"><canvas id="stats-donut"></canvas></div>
+            </figure>
+            <figure class="stats-card">
+              <figcaption>Cost by model (€)</figcaption>
+              <div class="stats-canvas-wrap"><canvas id="stats-bar-model"></canvas></div>
+            </figure>
+            <figure class="stats-card stats-card-wide">
+              <figcaption>Daily spend (€)</figcaption>
+              <div class="stats-canvas-wrap"><canvas id="stats-line"></canvas></div>
+            </figure>
+            <figure class="stats-card">
+              <figcaption>Tokens in vs out</figcaption>
+              <div class="stats-canvas-wrap"><canvas id="stats-stacked"></canvas></div>
+            </figure>
+          </div>
+          <div class="stats-table-wrap">
+            <table id="stats-table" class="stats-table">
+              <thead>
+                <tr>
+                  <th data-sort="model">Model</th>
+                  <th data-sort="provider">Provider</th>
+                  <th data-sort="surface">Surface</th>
+                  <th class="num" data-sort="calls">Calls</th>
+                  <th class="num" data-sort="input_tokens">Input tok</th>
+                  <th class="num" data-sort="output_tokens">Output tok</th>
+                  <th class="num" data-sort="cost_eur" aria-sort="descending">Cost (€)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <p id="stats-empty" class="stats-empty" hidden>No data yet — use the demo and the charts will populate within ~60s.</p>
+          </div>
         </div>
       </section>
     </main>
@@ -157,7 +441,156 @@
       </section>
     </div>
 
+    <!-- Voice widget -->
+    <div id="voice-widget" class="voice-widget" data-state="closed" data-voice-state="idle" aria-live="polite">
+      <button id="voice-toggle" class="voice-toggle" type="button" aria-label="Open voice advisor">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+          />
+        </svg>
+        <span class="voice-toggle-label">Talk to the advisor</span>
+      </button>
+
+      <section id="voice-panel" class="voice-panel" role="dialog" aria-label="IE voice advisor" aria-modal="false">
+        <header class="voice-header">
+          <div class="voice-title">
+            <span class="voice-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+                />
+              </svg>
+            </span>
+            <div>
+              <p class="voice-name">Voice advisor <span class="voice-beta">beta</span></p>
+              <p class="voice-substatus">English · powered by Claude + Whisper</p>
+            </div>
+          </div>
+          <button id="voice-close" class="voice-icon-btn" type="button" aria-label="Close voice advisor">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M18.3 5.71 12 12.01l-6.3-6.3-1.4 1.41L10.59 13.4l-6.29 6.29 1.41 1.41L12 14.81l6.29 6.29 1.41-1.41-6.29-6.29 6.29-6.29z"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <div class="voice-body">
+          <label class="voice-picker" for="voice-select">
+            <span class="voice-picker-label">Voice</span>
+            <select id="voice-select" class="voice-select" aria-label="Choose voice">
+              <option value="">Loading…</option>
+            </select>
+          </label>
+
+          <button id="voice-mic" class="voice-mic" type="button" aria-label="Start recording">
+            <span class="voice-mic-pulse" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+              />
+            </svg>
+          </button>
+          <p id="voice-status" class="voice-status">Tap the mic and ask anything</p>
+          <div class="voice-transcript" aria-live="polite">
+            <div id="voice-you" class="voice-line voice-line-user"></div>
+            <div id="voice-assistant" class="voice-line voice-line-assistant"></div>
+          </div>
+        </div>
+
+        <audio id="voice-audio" hidden></audio>
+      </section>
+    </div>
+
+    <!-- Avatar widget -->
+    <div id="avatar-widget" class="avatar-widget" data-state="closed" data-avatar-state="closed" aria-live="polite">
+      <button id="avatar-toggle" class="avatar-toggle" type="button" aria-label="Open avatar advisor">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"
+          />
+        </svg>
+        <span class="avatar-toggle-label">Meet the advisor</span>
+      </button>
+
+      <section id="avatar-panel" class="avatar-panel" role="dialog" aria-label="IE avatar advisor" aria-modal="false">
+        <header class="avatar-header">
+          <div class="avatar-title">
+            <span class="avatar-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"
+                />
+              </svg>
+            </span>
+            <div>
+              <p class="avatar-name">Meet the advisor <span class="avatar-beta">beta</span></p>
+              <p class="avatar-substatus">Lip-synced video · powered by HeyGen</p>
+            </div>
+          </div>
+          <button id="avatar-close" class="avatar-icon-btn" type="button" aria-label="Close avatar advisor">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M18.3 5.71 12 12.01l-6.3-6.3-1.4 1.41L10.59 13.4l-6.29 6.29 1.41 1.41L12 14.81l6.29 6.29 1.41-1.41-6.29-6.29 6.29-6.29z"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <div class="avatar-body">
+          <label class="avatar-picker" for="avatar-select">
+            <span class="avatar-picker-label">Avatar</span>
+            <select id="avatar-select" class="avatar-select" aria-label="Choose avatar">
+              <option value="">Loading…</option>
+            </select>
+          </label>
+
+          <div class="avatar-stage">
+            <video id="avatar-video" class="avatar-video" autoplay playsinline></video>
+            <div id="avatar-placeholder" class="avatar-placeholder">
+              <div class="avatar-spinner" aria-hidden="true"></div>
+              <p>Connecting to the advisor…</p>
+            </div>
+          </div>
+
+          <div class="avatar-controls">
+            <button id="avatar-mic" class="avatar-mic" type="button" aria-label="Start recording">
+              <span class="avatar-mic-pulse" aria-hidden="true"></span>
+              <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+                />
+              </svg>
+            </button>
+            <p id="avatar-status" class="avatar-status">Tap the mic and ask anything</p>
+          </div>
+
+          <div class="avatar-transcript" aria-live="polite">
+            <div id="avatar-you" class="avatar-line avatar-line-user"></div>
+            <div id="avatar-assistant" class="avatar-line avatar-line-assistant"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="md.js" defer></script>
     <script src="app.js" defer></script>
     <script src="chat.js" defer></script>
+    <script src="voice.js" defer></script>
+    <script src="avatar.js" defer></script>
+    <script src="personalize.js" defer></script>
+    <script src="gallery.js" defer></script>
+    <script src="reels.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js" defer></script>
+    <script src="stats.js" defer></script>
   </body>
 </html>

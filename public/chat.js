@@ -14,19 +14,94 @@
   const messages = [];
   let isStreaming = false;
   let greeted = false;
+  let welcomeEnhanced = false;
 
-  const GREETING =
+  const storedName = (() => {
+    try { return localStorage.getItem("ie_student_name") || null; } catch { return null; }
+  })();
+
+  const GREETING_GENERIC =
     "Hi! I'm IE's AI admissions advisor. Ask me anything about the 23 IE Business School master programs — formats, curriculum, careers, dual degrees, executive options, and more.";
+  const GREETING_NAMED = storedName
+    ? `Hi ${storedName}! Welcome back — ask me anything about IE's 23 master programs.`
+    : null;
+  const GREETING = GREETING_NAMED || GREETING_GENERIC;
+
+  const WELCOME_PROMPT =
+    "Write me a warm, brief welcome (1-2 sentences max — no questions back to me, no rules, no list, no markdown links). Speak as IE's admissions advisor. Address me by my first name once, and reference my top program of interest or career goal naturally. Match my tone preference.";
 
   function setState(state) {
     widget.dataset.state = state;
     toggle.setAttribute("aria-label", state === "open" ? "Close chat" : "Open chat");
     if (state === "open") {
       if (!greeted) {
-        appendMessage("assistant", GREETING);
+        const bubble = appendMessage("assistant", GREETING);
         greeted = true;
+        // If we know the student, ask Claude for a fully personalized welcome
+        // and replace the bubble in place when it streams in.
+        maybeEnhanceWelcome(bubble);
       }
       setTimeout(() => input.focus(), 80);
+    }
+  }
+
+  async function maybeEnhanceWelcome(bubble) {
+    if (welcomeEnhanced || !bubble) return;
+    const studentEmail = (() => {
+      try { return localStorage.getItem("ie_student_email") || null; } catch { return null; }
+    })();
+    if (!studentEmail) return;
+    welcomeEnhanced = true;
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: WELCOME_PROMPT }],
+          student_email: studentEmail,
+        }),
+      });
+      if (!res.ok || !res.body) return;
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let acc = "";
+      let started = false;
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let idx;
+        while ((idx = buffer.indexOf("\n\n")) !== -1) {
+          const rawEvent = buffer.slice(0, idx);
+          buffer = buffer.slice(idx + 2);
+          for (const line of rawEvent.split("\n")) {
+            if (!line.startsWith("data:")) continue;
+            const payload = line.slice(5).trim();
+            if (!payload) continue;
+            let data;
+            try { data = JSON.parse(payload); } catch { continue; }
+            if (data.type === "delta" && typeof data.text === "string") {
+              if (!started) {
+                bubble.innerHTML = "";
+                started = true;
+              }
+              acc += data.text;
+              bubble.innerHTML = renderAssistant(acc);
+              scrollToBottom();
+            } else if (data.type === "error") {
+              return; // keep the instant greeting on error
+            }
+          }
+        }
+      }
+      if (acc.trim().length > 0) {
+        // Record only the assistant turn so future chat turns have welcome context.
+        messages.push({ role: "assistant", content: acc });
+      }
+    } catch (err) {
+      // Silently keep the instant greeting if anything goes wrong.
+      console.warn("[chat] welcome enhance failed:", err);
     }
   }
 
@@ -59,11 +134,15 @@
     );
   }
 
+  function renderAssistant(text) {
+    return window.IEMarkdown ? window.IEMarkdown.render(text) : linkify(text);
+  }
+
   function appendMessage(role, text, opts = {}) {
     const li = document.createElement("li");
     li.className = `chat-msg ${role}`;
     if (opts.streaming) li.classList.add("is-streaming");
-    li.innerHTML = linkify(text);
+    li.innerHTML = role === "assistant" ? renderAssistant(text) : linkify(text);
     list.appendChild(li);
     scrollToBottom();
     return li;
@@ -92,10 +171,13 @@
     let acc = "";
 
     try {
+      const studentEmail = (() => {
+        try { return localStorage.getItem("ie_student_email") || null; } catch { return null; }
+      })();
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, student_email: studentEmail }),
       });
 
       if (!res.ok || !res.body) {
@@ -128,7 +210,7 @@
             }
             if (data.type === "delta" && typeof data.text === "string") {
               acc += data.text;
-              bubble.innerHTML = linkify(acc);
+              bubble.innerHTML = renderAssistant(acc);
               scrollToBottom();
             } else if (data.type === "done") {
               // server signaled completion

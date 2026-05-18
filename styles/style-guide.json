@@ -1,0 +1,90 @@
+{
+  "primary_colors": [
+    {
+      "name": "Navy Blue",
+      "hex": "#001F5C",
+      "role": "Primary brand color for headlines, CTAs, and key UI elements"
+    },
+    {
+      "name": "Sky Blue",
+      "hex": "#1E9FE8",
+      "role": "Accent color for CTAs, highlights, and visual interest elements"
+    },
+    {
+      "name": "White",
+      "hex": "#FFFFFF",
+      "role": "Background and text contrast"
+    },
+    {
+      "name": "Light Gray",
+      "hex": "#F5F5F5",
+      "role": "Secondary background and section dividers"
+    }
+  ],
+  "accent_colors": [
+    {
+      "name": "Cyan",
+      "hex": "#00D4FF",
+      "role": "Circular photo frames and modern accent details"
+    },
+    {
+      "name": "Dark Gray",
+      "hex": "#2D2D2D",
+      "role": "Secondary text and subtle UI elements"
+    }
+  ],
+  "typography": {
+    "headline": {
+      "description": "All-caps sans-serif for maximum impact and authority",
+      "weight": "700–800 (Bold–Extra Bold)",
+      "case": "ALL CAPS",
+      "tracking": "tight"
+    },
+    "body": {
+      "description": "Clean sans-serif for readability and contemporary feel",
+      "weight": "400–500"
+    },
+    "cta": {
+      "description": "Rounded button text, all-caps, bold sans-serif",
+      "weight": "700"
+    }
+  },
+  "layout_patterns": [
+    "Left-aligned headline with right-aligned portrait or hero image",
+    "Full-width hero section with dark overlay and centered text",
+    "Three-column grid for program cards or case studies",
+    "Alternating image-text blocks with generous white space",
+    "Rounded circular photo frames with cyan border accent",
+    "Geometric shapes (rectangles, lines) layered behind or alongside imagery",
+    "Centered stat blocks with navy background and white text"
+  ],
+  "photographic_style": "Professional corporate portraiture with warm, neutral lighting; subjects against blurred modern office backgrounds; lifestyle and campus imagery with cool color grading; high-contrast black-and-white candid shots mixed with vibrant color photography.",
+  "logo_treatment": "IE logo appears top-right with 'BUSINESS SCHOOL' tagline in navy background panel; clear space maintained around wordmark; consistent placement across templates.",
+  "mood": [
+    "Professional",
+    "Contemporary",
+    "Ambitious",
+    "Trustworthy",
+    "Forward-thinking",
+    "Approachable"
+  ],
+  "things_to_avoid": [
+    "Overly playful or casual imagery for executive programs",
+    "Heavy use of bright warm colors competing with navy and cyan",
+    "Serif typography for headlines or CTAs",
+    "Cramped layouts without breathing room",
+    "Low-contrast text on background images",
+    "Inconsistent photo color grading across sections",
+    "Placing logo other than top-right corner"
+  ],
+  "__meta__": {
+    "generated_at": "2026-05-18T15:56:19.650Z",
+    "source_files": [
+      "styles/pages/screencapture-ie-edu-business-school-2026-05-18-15_47_39.png",
+      "styles/banners/Trans-Banners-Marketing-Arbeo-DIRECCION-825x353-Enero2025.jpg",
+      "styles/banners/Trans-Banners-Marketing-Arbeo-EJECUTIVOS-825x353-Enero2025.jpg",
+      "styles/banners/header-school-social-media.jpeg"
+    ],
+    "model": "claude-haiku-4-5"
+  }
+}
