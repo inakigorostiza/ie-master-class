@@ -149,6 +149,23 @@ a:hover {
   color: white;
 }
 
+/* Demo disclaimer */
+.demo-disclaimer {
+  background: #fff8e1;
+  border-bottom: 1px solid #f0d97a;
+  color: #5a4500;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.demo-disclaimer-inner {
+  padding: 10px 0;
+}
+
+.demo-disclaimer strong {
+  color: #3d2f00;
+}
+
 /* Hero */
 .hero {
   position: relative;
