@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agents · IE Business School demo</title>
+    <meta
+      name="description"
+      content="Meet the AI agents that power this IE Business School demo: explorer, chatbot, voice, avatar, art designer, and data analytics — plus a few coming soon."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/agents/agents.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/#top" aria-label="IE Business School home">
+          <img src="/img/ie-logo.svg" alt="IE Business School" class="brand-logo" width="160" height="32" />
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/#programs">Programs</a>
+          <a href="/#about">About</a>
+          <a href="/agents/" aria-current="page">Agents</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <aside class="demo-disclaimer" role="note" aria-label="Demo disclaimer">
+        <div class="container demo-disclaimer-inner">
+          <strong>Demo notice.</strong>
+          This is a demo page designed for learning purposes only. It is
+          <strong>not affiliated with or endorsed by IE Business School</strong>.
+          Any data you submit will not be used for commercial or marketing
+          purposes and will be deleted within 24 hours.
+        </div>
+      </aside>
+
+      <section class="hero hero-compact">
+        <div class="container hero-inner">
+          <p class="eyebrow">Behind the demo</p>
+          <h1>Meet the AI Agents</h1>
+          <p class="lede">
+            Every part of this demo is powered by a small, specialized AI agent. Tap one
+            to try the feature it represents — or peek at what's coming next.
+          </p>
+        </div>
+      </section>
+
+      <section class="agents-section">
+        <div class="container">
+          <ul class="agents-grid" role="list">
+            <li class="agent-card">
+              <a class="agent-card-link" href="/#programs">
+                <span class="agent-card-media">
+                  <img src="/img/agents/explorer.png" alt="" loading="lazy" />
+                </span>
+                <h3>Explorer Agent</h3>
+                <p>Crawls IE program pages and turns them into a structured knowledge base the chatbot can search.</p>
+              </a>
+            </li>
+
+            <li class="agent-card">
+              <a class="agent-card-link" href="/?open=chat" data-open-chat-link>
+                <span class="agent-card-media">
+                  <img src="/img/agents/chatbot.png" alt="" loading="lazy" />
+                </span>
+                <h3>Chatbot Agent</h3>
+                <p>Answers admissions questions in natural language, grounded in the knowledge base.</p>
+              </a>
+            </li>
+
+            <li class="agent-card">
+              <a class="agent-card-link" href="/?open=chat&amp;mode=voice" data-open-chat-link>
+                <span class="agent-card-media">
+                  <img src="/img/agents/voice.png" alt="" loading="lazy" />
+                </span>
+                <h3>Voice Agent</h3>
+                <p>Listens to you with Whisper and replies out loud with ElevenLabs — full voice-to-voice chat.</p>
+              </a>
+            </li>
+
+            <li class="agent-card">
+              <a class="agent-card-link" href="/?open=chat&amp;mode=avatar" data-open-chat-link>
+                <span class="agent-card-media">
+                  <img src="/img/agents/avatar.png" alt="" loading="lazy" />
+                </span>
+                <h3>Avatar Agent</h3>
+                <p>Brings answers to life with a HeyGen live avatar that speaks and reacts in real time.</p>
+              </a>
+            </li>
+
+            <li class="agent-card">
+              <a class="agent-card-link" href="/#gallery">
+                <span class="agent-card-media">
+                  <img src="/img/agents/art-designer.png" alt="" loading="lazy" />
+                </span>
+                <h3>Art Designer Agent</h3>
+                <p>Generates personalized banners with Gemini Nano Banana Pro and 8-second reels with Veo 3.1.</p>
+              </a>
+            </li>
+
+            <li class="agent-card">
+              <a class="agent-card-link" href="/#stats">
+                <span class="agent-card-media">
+                  <img src="/img/agents/data-analytics.png" alt="" loading="lazy" />
+                </span>
+                <h3>Data Analytics Agent</h3>
+                <p>Tracks every model call, surfaces live token usage and EUR spend across all providers.</p>
+              </a>
+            </li>
+
+            <li class="agent-card is-soon">
+              <div class="agent-card-link" aria-disabled="true">
+                <span class="agent-badge">Coming soon</span>
+                <span class="agent-card-media">
+                  <img src="/img/agents/translator.png" alt="" loading="lazy" />
+                </span>
+                <h3>Translator Agent</h3>
+                <p>Multilingual answers and live interpretation so every prospective student can chat in their own language.</p>
+              </div>
+            </li>
+
+            <li class="agent-card is-soon">
+              <div class="agent-card-link" aria-disabled="true">
+                <span class="agent-badge">Coming soon</span>
+                <span class="agent-card-media">
+                  <img src="/img/agents/career-coach.png" alt="" loading="lazy" />
+                </span>
+                <h3>Career Coach Agent</h3>
+                <p>Maps your background to program outcomes and suggests next career moves backed by alumni data.</p>
+              </div>
+            </li>
+
+            <li class="agent-card is-soon">
+              <div class="agent-card-link" aria-disabled="true">
+                <span class="agent-badge">Coming soon</span>
+                <span class="agent-card-media">
+                  <img src="/img/agents/application-assistant.png" alt="" loading="lazy" />
+                </span>
+                <h3>Application Assistant</h3>
+                <p>Walks you through admissions documents, deadlines, and scholarships — and checks your draft.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>
+          This is a demo interface built on top of public IE Business School content. For official
+          admissions information, visit
+          <a href="https://www.ie.edu" target="_blank" rel="noopener">ie.edu</a>.
+        </p>
+        <p class="footer-admin">
+          <a href="/">Home</a>
+          <span aria-hidden="true">·</span>
+          <a href="/admin/creatives.html">Admin</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

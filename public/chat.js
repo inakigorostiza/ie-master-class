@@ -290,4 +290,31 @@
       sendMessage(q);
     },
   };
+
+  // Honor ?open=chat[&mode=voice|avatar] so links from /agents/ land on the
+  // right experience. Strips the params after firing so reload doesn't re-trigger.
+  (function maybeAutoOpenFromUrl() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("open") !== "chat") return;
+      const mode = params.get("mode");
+      params.delete("open");
+      params.delete("mode");
+      const qs = params.toString();
+      const cleanUrl = window.location.pathname + (qs ? `?${qs}` : "") + window.location.hash;
+      window.history.replaceState({}, "", cleanUrl);
+      // Defer so voice.js / avatar.js have time to register their globals.
+      setTimeout(() => {
+        if (mode === "voice" && window.IEVoice?.open) {
+          window.IEVoice.open();
+        } else if (mode === "avatar" && window.IEAvatar?.open) {
+          window.IEAvatar.open();
+        } else {
+          openChat();
+        }
+      }, 80);
+    } catch (err) {
+      /* no-op */
+    }
+  })();
 })();

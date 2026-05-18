@@ -493,6 +493,9 @@ a:hover {
 .footer-admin {
   margin: 0;
   opacity: 0.7;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .footer-admin a {
