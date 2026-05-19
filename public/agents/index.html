@@ -319,17 +319,17 @@
 <marker id="orch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0B1F3A"/></marker>
 </defs>
 <!-- Solid call paths (coords use viewBox 1600x900; mascot centers in %) -->
-<path id="p-01-02" d="M256,288 L352,432" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
-<path id="p-02-03" d="M352,432 L224,648" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
-<path id="p-03-04" d="M224,648 L432,648" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-01-02" d="M256,216 L352,432" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-02-03" d="M352,432 L224,666" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-03-04" d="M224,666 L432,666" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
 <path id="p-02-05" d="M352,432 L784,432" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
-<path id="p-05-07" d="M784,432 L1312,288" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-05-07" d="M784,432 L1312,216" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
 <path id="p-05-08" d="M784,432 L1344,432" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
-<path id="p-05-09" d="M784,432 L1312,648" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
-<!-- Dashed observation paths to Analytics (06 at 800,810) -->
-<path d="M352,432 Q420,640 760,810" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
-<path d="M432,648 Q580,740 770,810" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
-<path d="M784,432 L800,790" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
+<path id="p-05-09" d="M784,432 L1312,666" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<!-- Dashed observation paths to Analytics (06 at 800,720) -->
+<path d="M352,432 Q420,600 770,720" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
+<path d="M432,666 Q600,710 770,720" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
+<path d="M784,432 L800,700" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.5"/>
 <!-- Travelling data packets -->
 <circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#p-01-02"/></animateMotion></circle>
 <circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.3s"><mpath href="#p-02-03"/></animateMotion></circle>
@@ -340,23 +340,23 @@
 <circle r="6" fill="#FF5A5F"><animateMotion dur="2.8s" repeatCount="indefinite" begin="1.0s"><mpath href="#p-05-09"/></animateMotion></circle>
 <!-- Path labels — placed away from zone headers and other mascots -->
 <g font-family="JetBrains Mono, monospace" font-size="13" font-weight="500" fill="#0B1F3A">
-<text x="240" y="370" opacity="0.85">KB cache</text>
-<text x="270" y="620" opacity="0.85">audio stream</text>
+<text x="200" y="340" opacity="0.85">KB cache</text>
+<text x="270" y="640" opacity="0.85">audio stream</text>
 <text x="540" y="412" opacity="0.85">profile context</text>
 <text x="930" y="412" opacity="0.85">creative URL</text>
-<text x="820" y="760" opacity="0.55" font-style="italic">logUsage</text>
+<text x="830" y="640" opacity="0.55" font-style="italic">logUsage</text>
 </g>
 </svg>
 <!-- Agent nodes — positioned inside the colored zones, away from band headers -->
-<figure class="orchestra-node" data-agent="01" style="top:32%; left:16%;"><img src="/img/agents/explorer.png" alt="01 Explorer mascot"><figcaption>01 Explorer</figcaption></figure>
+<figure class="orchestra-node" data-agent="01" style="top:24%; left:16%;"><img src="/img/agents/explorer.png" alt="01 Explorer mascot"><figcaption>01 Explorer</figcaption></figure>
 <figure class="orchestra-node" data-agent="02" style="top:48%; left:22%;"><img src="/img/agents/chatbot.png" alt="02 Chatbot mascot"><figcaption>02 Chatbot</figcaption></figure>
-<figure class="orchestra-node" data-agent="03" style="top:72%; left:14%;"><img src="/img/agents/voice.png" alt="03 Voice mascot"><figcaption>03 Voice</figcaption></figure>
-<figure class="orchestra-node" data-agent="04" style="top:72%; left:27%;"><img src="/img/agents/avatar.png" alt="04 Avatar mascot"><figcaption>04 Avatar</figcaption></figure>
+<figure class="orchestra-node" data-agent="03" style="top:74%; left:14%;"><img src="/img/agents/voice.png" alt="03 Voice mascot"><figcaption>03 Voice</figcaption></figure>
+<figure class="orchestra-node" data-agent="04" style="top:74%; left:27%;"><img src="/img/agents/avatar.png" alt="04 Avatar mascot"><figcaption>04 Avatar</figcaption></figure>
 <figure class="orchestra-node" data-agent="05" style="top:48%; left:49%;"><img src="/img/agents/art-designer.png" alt="05 Art Designer mascot"><figcaption>05 Art Designer</figcaption></figure>
-<figure class="orchestra-node" data-agent="06" style="top:90%; left:50%;"><img src="/img/agents/data-analytics.png" alt="06 Analytics mascot"><figcaption>06 Analytics</figcaption></figure>
-<figure class="orchestra-node" data-agent="07" style="top:32%; left:82%;"><img src="/img/agents/email.png" alt="07 Email mascot"><figcaption>07 Email</figcaption></figure>
+<figure class="orchestra-node" data-agent="06" style="top:80%; left:50%;"><img src="/img/agents/data-analytics.png" alt="06 Analytics mascot"><figcaption>06 Analytics</figcaption></figure>
+<figure class="orchestra-node" data-agent="07" style="top:24%; left:82%;"><img src="/img/agents/email.png" alt="07 Email mascot"><figcaption>07 Email</figcaption></figure>
 <figure class="orchestra-node" data-agent="08" style="top:48%; left:84%;"><img src="/img/agents/whatsapp.png" alt="08 WhatsApp mascot"><figcaption>08 WhatsApp</figcaption></figure>
-<figure class="orchestra-node" data-agent="09" style="top:72%; left:82%;"><img src="/img/agents/sms.png" alt="09 SMS mascot"><figcaption>09 SMS</figcaption></figure>
+<figure class="orchestra-node" data-agent="09" style="top:74%; left:82%;"><img src="/img/agents/sms.png" alt="09 SMS mascot"><figcaption>09 SMS</figcaption></figure>
 </div>
 <p class="font-body-md text-body-md text-on-surface-variant text-center mt-stack-md max-w-2xl mx-auto">Solid lines are direct calls between agents. Dashed lines mean <strong class="text-primary">Analytics</strong> is silently logging that surface — every token, every second, every euro.</p>
 </section>
