@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",
+    "@google/stitch-sdk": "^0.3.5",
     "@neondatabase/serverless": "^1.1.0",
     "@resvg/resvg-js": "^2.6.2",
     "@vercel/blob": "^2.3.3",
