@@ -1429,6 +1429,7 @@ a:hover {
 
 .personalize-form input[type="text"],
 .personalize-form input[type="email"],
+.personalize-form input[type="tel"],
 .personalize-form input[type="url"],
 .personalize-form input[type="number"],
 .personalize-form input[type="date"],
