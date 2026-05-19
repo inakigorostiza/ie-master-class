@@ -162,24 +162,30 @@
             opacity: 0.85;
             text-transform: uppercase;
         }
+        .orchestra-stage { aspect-ratio: 16 / 9; }
+        @media (max-width: 900px) {
+            .orchestra-stage { aspect-ratio: 4 / 5; }
+        }
         .orchestra-node {
             position: absolute;
             transform: translate(-50%, -50%);
-            width: 5.5rem;
+            width: clamp(3.5rem, 6vw, 5rem);
             text-align: center;
             z-index: 2;
             pointer-events: none;
         }
         .orchestra-node img {
-            width: 5.5rem;
-            height: 5.5rem;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             display: block;
             margin: 0 auto;
             animation: orch-float 5s ease-in-out infinite alternate;
             filter: drop-shadow(0 6px 12px rgba(11, 31, 58, 0.18));
         }
-        .orchestra-node[data-agent="06"] { width: 4.5rem; }
-        .orchestra-node[data-agent="06"] img { width: 4.5rem; height: 4.5rem; }
+        .orchestra-node figcaption {
+            font-size: clamp(9px, 1vw, 11px);
+        }
+        .orchestra-node[data-agent="06"] { width: clamp(3rem, 5vw, 4.25rem); }
         .orchestra-node figcaption {
             font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
@@ -334,11 +340,11 @@
 <circle r="6" fill="#FF5A5F"><animateMotion dur="2.8s" repeatCount="indefinite" begin="1.0s"><mpath href="#p-05-09"/></animateMotion></circle>
 <!-- Path labels — placed away from zone headers and other mascots -->
 <g font-family="JetBrains Mono, monospace" font-size="13" font-weight="500" fill="#0B1F3A">
-<text x="295" y="370" opacity="0.85">KB cache</text>
-<text x="240" y="715" opacity="0.85">audio stream</text>
-<text x="540" y="420" opacity="0.85">profile context</text>
-<text x="930" y="478" opacity="0.85">creative URL</text>
-<text x="610" y="780" opacity="0.5" font-style="italic">logUsage</text>
+<text x="240" y="370" opacity="0.85">KB cache</text>
+<text x="270" y="620" opacity="0.85">audio stream</text>
+<text x="540" y="412" opacity="0.85">profile context</text>
+<text x="930" y="412" opacity="0.85">creative URL</text>
+<text x="820" y="760" opacity="0.55" font-style="italic">logUsage</text>
 </g>
 </svg>
 <!-- Agent nodes — positioned inside the colored zones, away from band headers -->
