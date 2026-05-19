@@ -114,6 +114,16 @@
         html { scroll-behavior: smooth; }
 
         /* ----- Agents Orchestra ----- */
+        .orchestra-stage > img {
+            transform: scale(1.22);
+            transform-origin: center;
+        }
+        .orchestra-stage svg text {
+            paint-order: stroke;
+            stroke: rgba(255, 255, 255, 0.95);
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
         .orchestra-node {
             position: absolute;
             transform: translate(-50%, -50%);
