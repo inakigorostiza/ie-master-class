@@ -162,7 +162,7 @@
 </div>
 </section>
 <!-- Agent Index Strip -->
-<section class="w-full border-y border-divider-gray bg-surface-container-lowest/95 backdrop-blur-md overflow-x-auto sticky top-20 z-40">
+<section data-agent-index-strip class="w-full border-y border-divider-gray bg-surface-container-lowest/95 backdrop-blur-md overflow-x-auto sticky top-20 z-40 transition-opacity duration-300">
 <div class="flex min-w-max">
 <a class="px-6 py-4 border-b-2 border-primary text-secondary-container font-label-caps text-label-caps cursor-pointer hover:opacity-80 transition-opacity" href="#agent-01">
 <span class="text-outline-variant mr-2">01</span>Explorer
@@ -810,4 +810,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js" defer></script>
 <script src="/stats.js" defer></script>
 <script src="/agents/compare.js" defer></script>
+<script>
+  // Hide the sticky agent index strip while the Stats section is in view.
+  (function () {
+    const strip = document.querySelector('[data-agent-index-strip]');
+    const stats = document.getElementById('stats');
+    if (!strip || !stats || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const inStats = entry.isIntersecting;
+        strip.classList.toggle('opacity-0', inStats);
+        strip.classList.toggle('pointer-events-none', inStats);
+      },
+      // Trigger as soon as Stats crosses below the sticky nav (~80px top bar).
+      { rootMargin: '-80px 0px 0px 0px', threshold: 0 }
+    );
+    io.observe(stats);
+  })();
+</script>
 </body></html>
