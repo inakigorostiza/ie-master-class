@@ -110,8 +110,70 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        section[id^="agent-"], section#stats { scroll-margin-top: 160px; }
+        section[id^="agent-"], section#stats, section#orchestra { scroll-margin-top: 160px; }
         html { scroll-behavior: smooth; }
+
+        /* ----- Agents Orchestra ----- */
+        .orchestra-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 7.5rem;
+            text-align: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .orchestra-node img {
+            width: 7.5rem;
+            height: 7.5rem;
+            display: block;
+            margin: 0 auto;
+            animation: orch-float 5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 6px 12px rgba(11, 31, 58, 0.18));
+        }
+        .orchestra-node figcaption {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: #0B1F3A;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 3px 8px;
+            border-radius: 999px;
+            margin-top: 6px;
+            display: inline-block;
+            border: 1px solid rgba(11, 31, 58, 0.08);
+        }
+        .orchestra-node[data-agent="01"] img { animation-delay: 0s; }
+        .orchestra-node[data-agent="02"] img { animation-delay: 0.4s; }
+        .orchestra-node[data-agent="03"] img { animation-delay: 0.8s; }
+        .orchestra-node[data-agent="04"] img { animation-delay: 1.2s; }
+        .orchestra-node[data-agent="05"] img { animation-delay: 1.6s; }
+        .orchestra-node[data-agent="06"] img { animation-delay: 2.0s; }
+        .orchestra-node[data-agent="07"] img { animation-delay: 2.4s; }
+        .orchestra-node[data-agent="08"] img { animation-delay: 2.8s; }
+        .orchestra-node[data-agent="09"] img { animation-delay: 3.2s; }
+        .orchestra-node[data-agent="06"] figcaption {
+            background: #0B1F3A;
+            color: #FAF9F6;
+            border-color: transparent;
+        }
+        .orchestra-node[data-agent="06"] {
+            animation: orch-pulse 3s ease-in-out infinite;
+            border-radius: 50%;
+        }
+        @keyframes orch-float {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-6px); }
+        }
+        @keyframes orch-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 95, 0); }
+            50%      { box-shadow: 0 0 0 22px rgba(255, 90, 95, 0.18); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .orchestra-stage *, .orchestra-stage *::before, .orchestra-stage *::after {
+                animation: none !important;
+            }
+        }
     </style>
 <link href="/agents/stats-embed.css" rel="stylesheet"/>
 </head>
@@ -177,6 +239,61 @@
 <span class="text-outline-variant mr-2">09</span>SMS
                 </a>
 </div>
+</section>
+<!-- AGENTS ORCHESTRA -->
+<section id="orchestra" class="py-section-band px-margin-safe">
+<header class="text-center max-w-3xl mx-auto mb-stack-lg">
+<span class="font-label-caps text-label-caps text-secondary">SECTION</span>
+<h2 class="font-headline-agent text-headline-agent text-primary mt-2">Agents Orchestra</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-stack-md">How the nine agents connect at runtime — what calls what, what flows between them, and who's watching every move.</p>
+</header>
+<div class="orchestra-stage relative w-full aspect-[16/9] max-w-6xl mx-auto rounded-2xl overflow-hidden border border-divider-gray bg-white shadow-[0_10px_40px_-10px_rgba(11,31,58,0.15)]">
+<img alt="" class="absolute inset-0 w-full h-full object-cover" src="/img/agents/orchestra-stage.png">
+<svg class="absolute inset-0 w-full h-full" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+<defs>
+<marker id="orch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0B1F3A"/></marker>
+</defs>
+<!-- Solid call paths -->
+<path id="p-01-02" d="M128,126 L352,342" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-02-03" d="M352,342 L192,558" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-03-04" d="M192,558 L480,558" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-02-05" d="M352,342 L800,342" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-05-07" d="M800,342 L1216,162" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-05-08" d="M800,342 L1312,378" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<path id="p-05-09" d="M800,342 L1216,594" stroke="#0B1F3A" stroke-width="2" fill="none" marker-end="url(#orch-arrow)"/>
+<!-- Dashed observation paths to Analytics -->
+<path d="M352,342 Q360,560 800,756" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.45"/>
+<path d="M480,558 Q620,650 800,756" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.45"/>
+<path d="M800,342 L800,756" stroke="#0B1F3A" stroke-width="1.5" fill="none" stroke-dasharray="3 7" opacity="0.45"/>
+<!-- Travelling data packets -->
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#p-01-02"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.3s"><mpath href="#p-02-03"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.6s"><mpath href="#p-03-04"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.2s"><mpath href="#p-02-05"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.8s" repeatCount="indefinite" begin="0.4s"><mpath href="#p-05-07"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.8s" repeatCount="indefinite" begin="0.7s"><mpath href="#p-05-08"/></animateMotion></circle>
+<circle r="6" fill="#FF5A5F"><animateMotion dur="2.8s" repeatCount="indefinite" begin="1.0s"><mpath href="#p-05-09"/></animateMotion></circle>
+<!-- Path labels -->
+<g font-family="JetBrains Mono, monospace" font-size="14" font-weight="500" fill="#0B1F3A">
+<text x="180" y="220" opacity="0.85">KB cache</text>
+<text x="290" y="555" opacity="0.85">audio stream</text>
+<text x="540" y="320" opacity="0.85">profile context</text>
+<text x="990" y="200" opacity="0.85">creative URL</text>
+<text x="820" y="560" opacity="0.55" font-style="italic">logUsage</text>
+</g>
+</svg>
+<!-- Agent nodes -->
+<figure class="orchestra-node" data-agent="01" style="top:14%; left:8%;"><img src="/img/agents/explorer.png" alt="01 Explorer mascot"><figcaption>01 Explorer</figcaption></figure>
+<figure class="orchestra-node" data-agent="02" style="top:38%; left:22%;"><img src="/img/agents/chatbot.png" alt="02 Chatbot mascot"><figcaption>02 Chatbot</figcaption></figure>
+<figure class="orchestra-node" data-agent="03" style="top:62%; left:12%;"><img src="/img/agents/voice.png" alt="03 Voice mascot"><figcaption>03 Voice</figcaption></figure>
+<figure class="orchestra-node" data-agent="04" style="top:62%; left:30%;"><img src="/img/agents/avatar.png" alt="04 Avatar mascot"><figcaption>04 Avatar</figcaption></figure>
+<figure class="orchestra-node" data-agent="05" style="top:38%; left:50%;"><img src="/img/agents/art-designer.png" alt="05 Art Designer mascot"><figcaption>05 Art Designer</figcaption></figure>
+<figure class="orchestra-node" data-agent="06" style="top:88%; left:50%;"><img src="/img/agents/data-analytics.png" alt="06 Analytics mascot"><figcaption>06 Analytics</figcaption></figure>
+<figure class="orchestra-node" data-agent="07" style="top:18%; left:76%;"><img src="/img/agents/email.png" alt="07 Email mascot"><figcaption>07 Email</figcaption></figure>
+<figure class="orchestra-node" data-agent="08" style="top:42%; left:82%;"><img src="/img/agents/whatsapp.png" alt="08 WhatsApp mascot"><figcaption>08 WhatsApp</figcaption></figure>
+<figure class="orchestra-node" data-agent="09" style="top:66%; left:76%;"><img src="/img/agents/sms.png" alt="09 SMS mascot"><figcaption>09 SMS</figcaption></figure>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mt-stack-md max-w-2xl mx-auto">Solid lines are direct calls between agents. Dashed lines mean <strong class="text-primary">Analytics</strong> is silently logging that surface — every token, every second, every euro.</p>
 </section>
 <!-- AGENT 01 Explorer -->
 <section class="py-section-band px-margin-safe grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center" id="agent-01">
