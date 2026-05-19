@@ -256,6 +256,99 @@ html, body {
 }
 .studio-generate-reel:hover:not(:disabled) { background: #4c1d95; }
 
+.studio-row-remove {
+  height: 32px;
+  padding: 0 10px;
+  background: transparent;
+  color: var(--ie-red);
+  border: 1px solid color-mix(in srgb, var(--ie-red) 35%, transparent);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-top: 2px;
+  display: block;
+  width: 100%;
+}
+.studio-row-remove:hover:not(:disabled) {
+  background: var(--ie-red);
+  color: #fff;
+  border-color: var(--ie-red);
+}
+.studio-row-remove:disabled { opacity: 0.55; cursor: progress; }
+
+/* Bulk toolbar */
+.studio-checkbox-cell {
+  width: 36px;
+  padding-left: 12px;
+  padding-right: 4px;
+  text-align: center;
+}
+.studio-checkbox-cell input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.studio-bulk-toolbar {
+  max-width: 1280px;
+  margin: 0 auto 14px;
+  padding: 12px 18px;
+  background: var(--ie-surface);
+  border: 1px solid var(--ie-line);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px -10px rgba(15, 17, 60, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+}
+.studio-bulk-count {
+  font-weight: 600;
+  color: var(--ie-ink);
+}
+.studio-bulk-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.studio-bulk-btn {
+  height: 34px;
+  padding: 0 14px;
+  background: var(--ie-navy);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.studio-bulk-btn:hover:not(:disabled) { background: var(--ie-navy-2); }
+.studio-bulk-btn:disabled { opacity: 0.55; cursor: progress; }
+.studio-bulk-btn-danger {
+  background: transparent;
+  color: var(--ie-red);
+  border: 1px solid color-mix(in srgb, var(--ie-red) 45%, transparent);
+}
+.studio-bulk-btn-danger:hover:not(:disabled) {
+  background: var(--ie-red);
+  color: #fff;
+  border-color: var(--ie-red);
+}
+
+.studio-bulk-progress {
+  margin: 0;
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--ie-ink-2);
+}
+.studio-bulk-progress[data-kind="pending"] { color: var(--ie-navy-2); }
+.studio-bulk-progress[data-kind="success"] { color: #15803d; }
+.studio-bulk-progress[data-kind="error"] { color: var(--ie-red); }
+
 .studio-banner video {
   width: 100px;
   max-height: 178px;

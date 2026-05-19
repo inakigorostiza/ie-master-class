@@ -25,11 +25,24 @@
         <p id="studio-summary" class="studio-summary"></p>
       </section>
 
+      <section id="studio-bulk-toolbar" class="studio-bulk-toolbar" hidden aria-live="polite">
+        <span class="studio-bulk-count"><span id="studio-bulk-count-value">0</span> selected</span>
+        <div class="studio-bulk-actions">
+          <button id="studio-bulk-banner" type="button" class="studio-bulk-btn">Regenerate banner</button>
+          <button id="studio-bulk-reel" type="button" class="studio-bulk-btn">Generate reel</button>
+          <button id="studio-bulk-remove" type="button" class="studio-bulk-btn studio-bulk-btn-danger">Remove</button>
+        </div>
+        <p id="studio-bulk-progress" class="studio-bulk-progress"></p>
+      </section>
+
       <div id="studio-status" class="studio-status" role="status" aria-live="polite"></div>
 
       <table id="studio-table" class="studio-table" hidden>
         <thead>
           <tr>
+            <th class="studio-checkbox-cell">
+              <input id="studio-select-all" type="checkbox" aria-label="Select all rows" />
+            </th>
             <th></th>
             <th>Student</th>
             <th>Career goal</th>

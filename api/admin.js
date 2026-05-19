@@ -1,12 +1,12 @@
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { getSql } from "../lib/db.js";
 import { getOperation, extractVideoFromResult, downloadVideoBytes } from "../lib/veo.js";
 
 export const config = { maxDuration: 30 };
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+  if (req.method !== "GET" && req.method !== "POST") {
+    res.setHeader("Allow", "GET, POST");
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     if (action === "students") return await listStudents(sql, req, res);
     if (action === "creatives") return await listCreatives(sql, req, res);
     if (action === "poll-creative") return await pollCreative(sql, req, res);
+    if (action === "delete-lead-creatives") return await deleteLeadCreatives(sql, req, res);
     return res.status(400).json({ error: `unknown action '${action}'` });
   } catch (err) {
     console.error("[admin] error:", err);
@@ -150,4 +151,55 @@ async function pollCreative(sql, req, res) {
   `;
 
   return res.status(200).json({ creative: updated });
+}
+
+// Delete every creative row for the given lead's email, and best-effort
+// delete the underlying Vercel Blob files. Keeps the student profile.
+async function deleteLeadCreatives(sql, req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "POST required" });
+  }
+
+  const body = await readJsonBody(req);
+  const email = (body?.email ?? req.query?.email ?? "").toString().trim().toLowerCase();
+  if (!email) return res.status(400).json({ error: "email is required" });
+
+  const rows = await sql`
+    DELETE FROM student_creatives
+    WHERE student_id = (SELECT id FROM students WHERE email = ${email})
+    RETURNING url
+  `;
+
+  const urls = rows.map((r) => r.url).filter(Boolean);
+  const blobErrors = [];
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+  for (const url of urls) {
+    try {
+      await del(url, blobToken ? { token: blobToken } : undefined);
+    } catch (err) {
+      blobErrors.push({ url, error: err?.message ?? String(err) });
+    }
+  }
+
+  return res.status(200).json({
+    deleted: rows.length,
+    blob_deleted: urls.length - blobErrors.length,
+    blob_errors: blobErrors,
+  });
+}
+
+async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object") return req.body;
+  if (typeof req.body === "string") {
+    try { return JSON.parse(req.body); } catch { return {}; }
+  }
+  return await new Promise((resolve) => {
+    let buf = "";
+    req.on("data", (chunk) => { buf += chunk; });
+    req.on("end", () => {
+      try { resolve(buf ? JSON.parse(buf) : {}); } catch { resolve({}); }
+    });
+    req.on("error", () => resolve({}));
+  });
 }

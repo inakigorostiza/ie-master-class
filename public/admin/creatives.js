@@ -13,7 +13,17 @@
   const modalBody = document.getElementById("studio-modal-body");
   const modalClose = document.getElementById("studio-modal-close");
 
+  const bulkToolbar = document.getElementById("studio-bulk-toolbar");
+  const bulkCountEl = document.getElementById("studio-bulk-count-value");
+  const bulkBannerBtn = document.getElementById("studio-bulk-banner");
+  const bulkReelBtn = document.getElementById("studio-bulk-reel");
+  const bulkRemoveBtn = document.getElementById("studio-bulk-remove");
+  const bulkProgressEl = document.getElementById("studio-bulk-progress");
+  const selectAllEl = document.getElementById("studio-select-all");
+
   let students = [];
+  const selected = new Set();
+  let bulkRunning = false;
 
   tokenInput.value = localStorage.getItem(STORAGE_KEY) ?? "";
   tokenInput.addEventListener("change", () => {
@@ -23,6 +33,11 @@
   refreshBtn.addEventListener("click", loadStudents);
   filterInput.addEventListener("input", renderTable);
   modalClose.addEventListener("click", () => modal.close());
+
+  selectAllEl.addEventListener("change", onSelectAllChange);
+  bulkBannerBtn.addEventListener("click", () => runBulk("banner"));
+  bulkReelBtn.addEventListener("click", () => runBulk("reel"));
+  bulkRemoveBtn.addEventListener("click", () => runBulk("remove"));
 
   document.addEventListener("DOMContentLoaded", loadStudents);
   if (document.readyState !== "loading") loadStudents();
@@ -67,7 +82,11 @@
     for (const s of rows) {
       const tr = document.createElement("tr");
       tr.dataset.email = s.email;
+      const isChecked = selected.has(s.email);
       tr.innerHTML = `
+        <td class="studio-checkbox-cell">
+          <input type="checkbox" data-bulk-select aria-label="Select ${escapeHtml(s.email)}" ${isChecked ? "checked" : ""} />
+        </td>
         <td class="studio-photo">
           ${
             s.profile_picture_url
@@ -112,6 +131,7 @@
           <button class="studio-generate studio-generate-reel" type="button" data-action="generate-reel">
             Generate reel
           </button>
+          <button class="studio-row-remove" type="button" data-action="remove-lead">Remove</button>
           <p class="studio-row-status" data-role="status"></p>
         </td>
       `;
@@ -127,6 +147,13 @@
     tbody.querySelectorAll("[data-action='history']").forEach((btn) => {
       btn.addEventListener("click", (e) => onHistory(e.target.closest("tr")));
     });
+    tbody.querySelectorAll("[data-action='remove-lead']").forEach((btn) => {
+      btn.addEventListener("click", (e) => onRemoveLead(e.target.closest("tr")));
+    });
+    tbody.querySelectorAll("[data-bulk-select]").forEach((cb) => {
+      cb.addEventListener("change", onRowCheckboxChange);
+    });
+    syncBulkUI();
   }
 
   async function onGenerateBanner(tr) {
@@ -296,5 +323,169 @@
   function setStatus(message, kind) {
     statusEl.textContent = message ?? "";
     statusEl.dataset.kind = kind ?? "";
+  }
+
+  // ─── Bulk-select + remove ────────────────────────────────────────────────
+
+  function onRowCheckboxChange(e) {
+    const cb = e.target;
+    const email = cb.closest("tr")?.dataset.email;
+    if (!email) return;
+    if (cb.checked) selected.add(email);
+    else selected.delete(email);
+    syncBulkUI();
+  }
+
+  function onSelectAllChange() {
+    const visibleEmails = Array.from(tbody.querySelectorAll("tr"))
+      .map((tr) => tr.dataset.email)
+      .filter(Boolean);
+    if (selectAllEl.checked) {
+      visibleEmails.forEach((e) => selected.add(e));
+    } else {
+      visibleEmails.forEach((e) => selected.delete(e));
+    }
+    tbody.querySelectorAll("[data-bulk-select]").forEach((cb) => {
+      cb.checked = selectAllEl.checked;
+    });
+    syncBulkUI();
+  }
+
+  function syncBulkUI() {
+    const n = selected.size;
+    bulkCountEl.textContent = String(n);
+    bulkToolbar.hidden = n === 0;
+    bulkBannerBtn.textContent = `Regenerate banner${n ? ` (${n})` : ""}`;
+    bulkReelBtn.textContent = `Generate reel${n ? ` (${n})` : ""}`;
+    bulkRemoveBtn.textContent = `Remove${n ? ` (${n})` : ""}`;
+    const visibleEmails = Array.from(tbody.querySelectorAll("tr"))
+      .map((tr) => tr.dataset.email)
+      .filter(Boolean);
+    selectAllEl.checked = visibleEmails.length > 0 && visibleEmails.every((e) => selected.has(e));
+  }
+
+  async function onRemoveLead(tr) {
+    const email = tr.dataset.email;
+    if (!email) return;
+    if (!confirm(`Remove all creatives for ${email}? This deletes banners, reels, and their files. The lead profile stays.`)) return;
+    const btn = tr.querySelector("[data-action='remove-lead']");
+    const status = tr.querySelector("[data-role='status']");
+    btn.disabled = true;
+    status.dataset.kind = "pending";
+    status.textContent = "Removing creatives…";
+    try {
+      const result = await deleteLeadCreatives(email);
+      status.dataset.kind = "success";
+      status.textContent = `Deleted ${result.deleted} creative${result.deleted === 1 ? "" : "s"}`;
+      const bannerCell = tr.querySelector(".studio-banner");
+      if (bannerCell) bannerCell.innerHTML = `<span class="studio-empty">—</span>`;
+      const s = students.find((x) => x.email === email);
+      if (s) {
+        s.latest_creative_url = null;
+        s.creatives_count = 0;
+      }
+      // Update the per-row banner button label.
+      const bannerBtn = tr.querySelector("[data-action='generate-banner']");
+      if (bannerBtn) bannerBtn.textContent = "Generate banner";
+      selected.delete(email);
+      syncBulkUI();
+    } catch (err) {
+      console.error(err);
+      status.dataset.kind = "error";
+      status.textContent = err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function deleteLeadCreatives(email) {
+    const res = await fetch("/api/admin?action=delete-lead-creatives", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": tokenInput.value.trim(),
+      },
+      body: JSON.stringify({ email }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+    return json;
+  }
+
+  async function runBulk(kind) {
+    if (bulkRunning) return;
+    const emails = Array.from(selected);
+    if (emails.length === 0) return;
+
+    if (kind === "remove") {
+      if (!confirm(`Remove all creatives for ${emails.length} lead${emails.length === 1 ? "" : "s"}? This deletes banners, reels, and their files.`)) {
+        return;
+      }
+    }
+
+    bulkRunning = true;
+    setBulkButtonsDisabled(true);
+    let okCount = 0;
+    let failCount = 0;
+    const total = emails.length;
+    bulkProgressEl.dataset.kind = "pending";
+    bulkProgressEl.textContent = `0 of ${total}…`;
+
+    for (let i = 0; i < emails.length; i++) {
+      const email = emails[i];
+      const tr = tbody.querySelector(`tr[data-email="${cssEscape(email)}"]`);
+      try {
+        if (kind === "banner" && tr) {
+          await onGenerateBanner(tr);
+        } else if (kind === "reel" && tr) {
+          await onGenerateReel(tr);
+        } else if (kind === "remove") {
+          if (tr) await onRemoveLead.callPath(tr);
+          else await deleteLeadCreatives(email);
+        }
+        okCount += 1;
+      } catch (err) {
+        console.error("[bulk]", kind, email, err);
+        failCount += 1;
+      }
+      bulkProgressEl.textContent = `${i + 1} of ${total}${failCount ? ` · ${failCount} failed` : ""}`;
+    }
+
+    bulkProgressEl.dataset.kind = failCount ? "error" : "success";
+    bulkProgressEl.textContent = `Done · ${okCount} succeeded${failCount ? ` · ${failCount} failed` : ""}`;
+    bulkRunning = false;
+    setBulkButtonsDisabled(false);
+  }
+
+  function setBulkButtonsDisabled(disabled) {
+    [bulkBannerBtn, bulkReelBtn, bulkRemoveBtn].forEach((b) => { b.disabled = disabled; });
+  }
+
+  // Bulk-remove path that skips the per-row confirm (we've already confirmed once for the whole batch).
+  onRemoveLead.callPath = async function callPath(tr) {
+    const email = tr.dataset.email;
+    if (!email) return;
+    const status = tr.querySelector("[data-role='status']");
+    status.dataset.kind = "pending";
+    status.textContent = "Removing…";
+    const result = await deleteLeadCreatives(email);
+    status.dataset.kind = "success";
+    status.textContent = `Deleted ${result.deleted}`;
+    const bannerCell = tr.querySelector(".studio-banner");
+    if (bannerCell) bannerCell.innerHTML = `<span class="studio-empty">—</span>`;
+    const s = students.find((x) => x.email === email);
+    if (s) {
+      s.latest_creative_url = null;
+      s.creatives_count = 0;
+    }
+    const bannerBtn = tr.querySelector("[data-action='generate-banner']");
+    if (bannerBtn) bannerBtn.textContent = "Generate banner";
+    selected.delete(email);
+    syncBulkUI();
+  };
+
+  function cssEscape(s) {
+    if (window.CSS && CSS.escape) return CSS.escape(s);
+    return String(s).replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
   }
 })();
