@@ -1,6 +1,7 @@
 import { put, del } from "@vercel/blob";
 import { getSql } from "../lib/db.js";
 import { getOperation, extractVideoFromResult, downloadVideoBytes } from "../lib/veo.js";
+import { sendEmail, sendSms, sendWhatsapp } from "../lib/messaging.js";
 
 export const config = { maxDuration: 30 };
 
@@ -26,6 +27,9 @@ export default async function handler(req, res) {
     if (action === "poll-creative") return await pollCreative(sql, req, res);
     if (action === "delete-lead-creatives") return await deleteLeadCreatives(sql, req, res);
     if (action === "delete-creative") return await deleteCreative(sql, req, res);
+    if (action === "send-email" || action === "send-sms" || action === "send-whatsapp") {
+      return await sendToLead(sql, req, res, action.replace("send-", ""));
+    }
     return res.status(400).json({ error: `unknown action '${action}'` });
   } catch (err) {
     console.error("[admin] error:", err);
@@ -39,6 +43,7 @@ async function listStudents(sql, req, res) {
   const rows = await sql`
     SELECT
       s.id, s.email, s.full_name, s.country, s.city, s.profile_picture_url,
+      s.phone_number,
       s.top_program_interest, s.visual_vibe, s.tone_preference, s.three_words,
       s.career_goal_one_line, s.dream_company_or_industry, s.created_at, s.updated_at,
       (SELECT COUNT(*)::int FROM student_creatives c WHERE c.student_id = s.id) AS creatives_count,
@@ -219,6 +224,72 @@ async function deleteCreative(sql, req, res) {
   }
 
   return res.status(200).json({ deleted: true, id: row.id, blob_deleted: blobDeleted, blob_error: blobError });
+}
+
+// Send a templated demo message to a lead via the chosen channel.
+// `channel` is "email" | "sms" | "whatsapp".
+async function sendToLead(sql, req, res, channel) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "POST required" });
+  }
+  const body = await readJsonBody(req);
+  const email = (body?.email ?? "").toString().trim().toLowerCase();
+  if (!email) return res.status(400).json({ error: "email is required" });
+
+  const [row] = await sql`
+    SELECT s.email, s.full_name, s.phone_number,
+      (SELECT c.url FROM student_creatives c
+         WHERE c.student_id = s.id AND c.status = 'completed' AND c.url IS NOT NULL
+         ORDER BY c.created_at DESC LIMIT 1) AS latest_creative_url
+    FROM students s
+    WHERE s.email = ${email}
+    LIMIT 1
+  `;
+  if (!row) return res.status(404).json({ error: "student not found" });
+
+  const creativeUrl = row.latest_creative_url;
+  if (!creativeUrl) return res.status(400).json({ error: "no creative to share yet — generate a banner or reel first" });
+
+  const firstName = (row.full_name || "").trim().split(/\s+/)[0] || "there";
+
+  try {
+    if (channel === "email") {
+      const subject = "Your IE Business School preview from the Creative Studio";
+      const text = [
+        `Hi ${firstName},`,
+        "",
+        "Great to meet you! We've put together a personalized preview based on your profile and career goal. Take a look:",
+        "",
+        `  ${creativeUrl}`,
+        "",
+        "If anything in your profile needs an update, just reply to this email.",
+        "",
+        "— The IE Creative Studio team",
+      ].join("\n");
+      const { id } = await sendEmail({ to: row.email, subject, body: text });
+      return res.status(200).json({ ok: true, channel, provider_id: id });
+    }
+
+    if (!row.phone_number) {
+      return res.status(400).json({ error: "no phone number on file" });
+    }
+
+    const shortBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${creativeUrl}`;
+
+    if (channel === "sms") {
+      const { sid } = await sendSms({ to: row.phone_number, body: shortBody });
+      return res.status(200).json({ ok: true, channel, provider_id: sid });
+    }
+    if (channel === "whatsapp") {
+      const { sid } = await sendWhatsapp({ to: row.phone_number, body: shortBody });
+      return res.status(200).json({ ok: true, channel, provider_id: sid });
+    }
+    return res.status(400).json({ error: `unknown channel '${channel}'` });
+  } catch (err) {
+    console.error(`[admin] send-${channel} error:`, err);
+    return res.status(502).json({ error: err?.message ?? `send-${channel} failed` });
+  }
 }
 
 async function readJsonBody(req) {

@@ -133,6 +133,7 @@
             Generate reel
           </button>
           <button class="studio-row-remove" type="button" data-action="remove-lead">Remove</button>
+          ${renderSendButtons(s)}
           <p class="studio-row-status" data-role="status"></p>
         </td>
       `;
@@ -150,6 +151,12 @@
     });
     tbody.querySelectorAll("[data-action='remove-lead']").forEach((btn) => {
       btn.addEventListener("click", (e) => onRemoveLead(e.target.closest("tr")));
+    });
+    tbody.querySelectorAll("[data-action^='send-']").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const channel = e.currentTarget.dataset.action.replace("send-", "");
+        onSendMessage(e.currentTarget.closest("tr"), channel);
+      });
     });
     tbody.querySelectorAll("[data-bulk-select]").forEach((cb) => {
       cb.addEventListener("change", onRowCheckboxChange);
@@ -566,4 +573,64 @@
     return String(s).replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
   }
 
+  // ─── Send email / WhatsApp / SMS ─────────────────────────────────────────
+
+  function renderSendButtons(s) {
+    const noCreative = !s.latest_creative_url;
+    const noPhone = !s.phone_number;
+    const phoneTitle = noCreative
+      ? "Generate a banner or reel first"
+      : noPhone
+        ? "No phone number on file"
+        : "";
+    const emailTitle = noCreative ? "Generate a banner or reel first" : "";
+    return `
+      <button class="studio-send studio-send-email" type="button" data-action="send-email"
+        ${noCreative ? "disabled" : ""} ${emailTitle ? `title="${emailTitle}"` : ""}>Email</button>
+      <button class="studio-send studio-send-whatsapp" type="button" data-action="send-whatsapp"
+        ${(noCreative || noPhone) ? "disabled" : ""} ${phoneTitle ? `title="${phoneTitle}"` : ""}>WhatsApp</button>
+      <button class="studio-send studio-send-sms" type="button" data-action="send-sms"
+        ${(noCreative || noPhone) ? "disabled" : ""} ${phoneTitle ? `title="${phoneTitle}"` : ""}>SMS</button>
+    `;
+  }
+
+  async function onSendMessage(tr, channel) {
+    if (!tr || !channel) return;
+    const email = tr.dataset.email;
+    const buttons = tr.querySelectorAll("[data-action^='send-']");
+    const status = tr.querySelector("[data-role='status']");
+    const pretty = channel === "email" ? "email" : channel === "sms" ? "SMS" : "WhatsApp";
+
+    buttons.forEach((b) => { b.disabled = true; });
+    status.dataset.kind = "pending";
+    status.textContent = `Sending ${pretty}…`;
+
+    try {
+      const res = await fetch(`/api/admin?action=send-${channel}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": tokenInput.value.trim(),
+        },
+        body: JSON.stringify({ email }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+      status.dataset.kind = "success";
+      status.textContent = `${pretty} sent ✓`;
+    } catch (err) {
+      console.error(err);
+      status.dataset.kind = "error";
+      status.textContent = `${pretty} failed: ${err.message}`;
+    } finally {
+      // Re-evaluate disabled state from the (possibly updated) row data.
+      const s = students.find((x) => x.email === email);
+      const noCreative = !s?.latest_creative_url;
+      const noPhone = !s?.phone_number;
+      tr.querySelectorAll("[data-action='send-email']").forEach((b) => { b.disabled = noCreative; });
+      tr.querySelectorAll("[data-action='send-whatsapp'], [data-action='send-sms']").forEach((b) => {
+        b.disabled = noCreative || noPhone;
+      });
+    }
+  }
 })();

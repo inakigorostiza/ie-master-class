@@ -277,6 +277,26 @@ html, body {
 }
 .studio-row-remove:disabled { opacity: 0.55; cursor: progress; }
 
+.studio-send {
+  height: 30px;
+  padding: 0 10px;
+  background: var(--ie-navy);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-top: 6px;
+  display: block;
+  width: 100%;
+}
+.studio-send:hover:not(:disabled) { filter: brightness(1.08); }
+.studio-send:disabled { opacity: 0.45; cursor: not-allowed; }
+.studio-send-whatsapp { background: #25D366; color: #06241a; }
+.studio-send-sms { background: #475569; }
+
 /* Bulk toolbar */
 .studio-checkbox-cell {
   width: 36px;
