@@ -114,15 +114,53 @@
         html { scroll-behavior: smooth; }
 
         /* ----- Agents Orchestra ----- */
-        .orchestra-stage > img {
-            transform: scale(1.22);
-            transform-origin: center;
-        }
         .orchestra-stage svg text {
             paint-order: stroke;
             stroke: rgba(255, 255, 255, 0.95);
             stroke-width: 4px;
             stroke-linejoin: round;
+        }
+        .orchestra-zones {
+            position: absolute;
+            inset: 0;
+            display: flex;
+        }
+        .orchestra-zone { flex: 1; height: 100%; }
+        .orchestra-zone.knowledge   { background: linear-gradient(180deg, #DBEEFB 0%, #BFE0F4 100%); }
+        .orchestra-zone.creation    { background: linear-gradient(180deg, #F5F1EC 0%, #E8E2DA 100%); }
+        .orchestra-zone.delivery    { background: linear-gradient(180deg, #FFE3DD 0%, #FFC9BC 100%); }
+        .orchestra-band {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 13%;
+            background: #0B1F3A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .orchestra-zone-label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: #0B1F3A;
+            opacity: 0.55;
+            z-index: 1;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+        .orchestra-band-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: #FAF9F6;
+            opacity: 0.85;
+            text-transform: uppercase;
         }
         .orchestra-node {
             position: absolute;
@@ -260,7 +298,16 @@
 <p class="font-body-lg text-body-lg text-on-surface-variant mt-stack-md">How the nine agents connect at runtime — what calls what, what flows between them, and who's watching every move.</p>
 </header>
 <div class="orchestra-stage relative w-full aspect-[16/9] max-w-6xl mx-auto rounded-2xl overflow-hidden border border-divider-gray bg-white shadow-[0_10px_40px_-10px_rgba(11,31,58,0.15)]">
-<img alt="" class="absolute inset-0 w-full h-full object-cover" src="/img/agents/orchestra-stage.png">
+<!-- Backdrop: three vertical zones + observability footer band -->
+<div class="orchestra-zones" aria-hidden="true">
+<div class="orchestra-zone knowledge"></div>
+<div class="orchestra-zone creation"></div>
+<div class="orchestra-zone delivery"></div>
+</div>
+<div class="orchestra-band" aria-hidden="true"><span class="orchestra-band-label">Observability</span></div>
+<span class="orchestra-zone-label" style="top:7%; left:16.67%;">Knowledge</span>
+<span class="orchestra-zone-label" style="top:7%; left:50%;">Creation</span>
+<span class="orchestra-zone-label" style="top:7%; left:83.33%;">Delivery</span>
 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
 <defs>
 <marker id="orch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0B1F3A"/></marker>
