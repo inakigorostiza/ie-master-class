@@ -21,9 +21,9 @@
   })();
 
   const GREETING_GENERIC =
-    "Hi! I'm IE's AI admissions advisor. Ask me anything about the 23 IE Business School master programs — formats, curriculum, careers, dual degrees, executive options, and more.";
+    "Hi! I'm IE's AI admissions advisor. Ask me anything about IE Business School's marketing master programs — formats, curriculum, careers, and more.";
   const GREETING_NAMED = storedName
-    ? `Hi ${storedName}! Welcome back — ask me anything about IE's 23 master programs.`
+    ? `Hi ${storedName}! Welcome back — ask me anything about IE's marketing master programs.`
     : null;
   const GREETING = GREETING_NAMED || GREETING_GENERIC;
 
