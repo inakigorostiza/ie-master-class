@@ -265,6 +265,7 @@
   async function onHistory(tr) {
     const email = tr.dataset.email;
     modalTitle.textContent = `History — ${email}`;
+    modalBody.dataset.email = email;
     modalBody.innerHTML = "<p class='studio-loading'>Loading…</p>";
     modal.showModal();
     try {
@@ -284,19 +285,94 @@
                   : `<a href="${c.url}" target="_blank"><img src="${c.url}" alt="${c.format}" loading="lazy" /></a>`;
               const latency = c.latency_ms ? `${(c.latency_ms / 1000).toFixed(1)}s · ` : "";
               return `
-              <figure class="studio-gallery-item">
+              <figure class="studio-gallery-item" data-creative-id="${escapeHtml(c.id)}" data-creative-url="${escapeHtml(c.url ?? "")}">
                 ${media}
                 <figcaption>
                   <strong>${c.format}</strong> · ${c.width || "?"}×${c.height || "?"} ·
                   ${latency}${new Date(c.created_at).toLocaleString()}
                   ${c.status === "failed" ? `<br><span class="studio-error">${c.error_message || "failed"}</span>` : ""}
                 </figcaption>
+                <button class="studio-creative-remove" type="button" data-action="delete-creative" aria-label="Delete this creative">Delete</button>
               </figure>`;
             })
             .join("")
         : `<p class="studio-empty">No creatives yet.</p>`;
+
+      modalBody.querySelectorAll("[data-action='delete-creative']").forEach((btn) => {
+        btn.addEventListener("click", (e) => onDeleteCreative(e.target.closest("figure")));
+      });
     } catch (err) {
       modalBody.innerHTML = `<p class="studio-error">${err.message}</p>`;
+    }
+  }
+
+  async function onDeleteCreative(figure) {
+    if (!figure) return;
+    const id = figure.dataset.creativeId;
+    const url = figure.dataset.creativeUrl;
+    const email = modalBody.dataset.email;
+    if (!id) return;
+    if (!confirm("Delete this creative? The file will be removed from storage and from the public gallery.")) return;
+
+    const btn = figure.querySelector("[data-action='delete-creative']");
+    btn.disabled = true;
+    btn.textContent = "Deleting…";
+    try {
+      const res = await fetch("/api/admin?action=delete-creative", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": tokenInput.value.trim(),
+        },
+        body: JSON.stringify({ id }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+
+      figure.remove();
+      const remaining = modalBody.querySelectorAll(".studio-gallery-item").length;
+      if (remaining === 0) {
+        modalBody.innerHTML = `<p class="studio-empty">No creatives yet.</p>`;
+      }
+
+      const s = students.find((x) => x.email === email);
+      const tr = tbody.querySelector(`tr[data-email="${cssEscape(email ?? "")}"]`);
+      if (s) {
+        s.creatives_count = Math.max(0, (s.creatives_count ?? 0) - 1);
+        if (s.latest_creative_url === url) {
+          // Best-effort: find next-most-recent URL still in the modal.
+          const nextFig = modalBody.querySelector(".studio-gallery-item[data-creative-url]:not([data-creative-url=''])");
+          s.latest_creative_url = nextFig?.dataset.creativeUrl || null;
+        }
+        if (tr) {
+          const bannerCell = tr.querySelector(".studio-banner");
+          if (bannerCell) {
+            const u = s.latest_creative_url;
+            const isVideo = u && (/\.mp4(\?|$)/i.test(u));
+            bannerCell.innerHTML = u
+              ? (isVideo
+                  ? `<a href="${u}" target="_blank"><video src="${u}" muted loop autoplay playsinline></video></a>`
+                  : `<a href="${u}" target="_blank"><img src="${u}" alt="latest banner" /></a>`)
+              : `<span class="studio-empty">—</span>`;
+            if (s.creatives_count > 0) {
+              const histBtn = document.createElement("button");
+              histBtn.className = "studio-link";
+              histBtn.type = "button";
+              histBtn.dataset.action = "history";
+              histBtn.textContent = `${s.creatives_count} total`;
+              histBtn.addEventListener("click", () => onHistory(tr));
+              bannerCell.appendChild(histBtn);
+            }
+          }
+          const bannerBtn = tr.querySelector("[data-action='generate-banner']");
+          if (bannerBtn && s.creatives_count === 0) bannerBtn.textContent = "Generate banner";
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = "Delete";
+      alert(`Delete failed: ${err.message}`);
     }
   }
 

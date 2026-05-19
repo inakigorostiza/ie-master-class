@@ -431,6 +431,7 @@ html, body {
   gap: 16px;
 }
 .studio-gallery-item {
+  position: relative;
   margin: 0;
   background: var(--ie-bg);
   border-radius: 10px;
@@ -445,6 +446,29 @@ html, body {
   font-size: 12px;
   color: var(--ie-ink-2);
 }
+.studio-creative-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  height: 26px;
+  padding: 0 10px;
+  background: rgba(15, 17, 60, 0.7);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+.studio-gallery-item:hover .studio-creative-remove,
+.studio-creative-remove:focus-visible {
+  opacity: 1;
+}
+.studio-creative-remove:hover:not(:disabled) { background: var(--ie-red); }
+.studio-creative-remove:disabled { opacity: 0.7; cursor: progress; }
 .studio-loading { color: var(--ie-ink-2); }
 .studio-error { color: var(--ie-red); }
 

@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     if (action === "creatives") return await listCreatives(sql, req, res);
     if (action === "poll-creative") return await pollCreative(sql, req, res);
     if (action === "delete-lead-creatives") return await deleteLeadCreatives(sql, req, res);
+    if (action === "delete-creative") return await deleteCreative(sql, req, res);
     return res.status(400).json({ error: `unknown action '${action}'` });
   } catch (err) {
     console.error("[admin] error:", err);
@@ -187,6 +188,37 @@ async function deleteLeadCreatives(sql, req, res) {
     blob_deleted: urls.length - blobErrors.length,
     blob_errors: blobErrors,
   });
+}
+
+// Delete a single creative by id. Returns the deleted row's url and a flag
+// indicating whether the Blob file deletion succeeded.
+async function deleteCreative(sql, req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "POST required" });
+  }
+  const body = await readJsonBody(req);
+  const id = (body?.id ?? req.query?.id ?? "").toString().trim();
+  if (!id) return res.status(400).json({ error: "id is required" });
+
+  const [row] = await sql`
+    DELETE FROM student_creatives WHERE id = ${id} RETURNING id, url
+  `;
+  if (!row) return res.status(404).json({ error: "creative not found" });
+
+  let blobDeleted = false;
+  let blobError = null;
+  if (row.url) {
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    try {
+      await del(row.url, blobToken ? { token: blobToken } : undefined);
+      blobDeleted = true;
+    } catch (err) {
+      blobError = err?.message ?? String(err);
+    }
+  }
+
+  return res.status(200).json({ deleted: true, id: row.id, blob_deleted: blobDeleted, blob_error: blobError });
 }
 
 async function readJsonBody(req) {
