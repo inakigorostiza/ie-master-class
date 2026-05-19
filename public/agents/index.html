@@ -1,165 +1,758 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Agents · IE Business School demo</title>
-    <meta
-      name="description"
-      content="Meet the AI agents that power this IE Business School demo: explorer, chatbot, voice, avatar, art designer, and data analytics — plus a few coming soon."
-    />
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/agents/agents.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="/#top" aria-label="IE Business School home">
-          <img src="/img/ie-logo.svg" alt="IE Business School" class="brand-logo" width="160" height="32" />
-        </a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="/#programs">Programs</a>
-          <a href="/#about">About</a>
-          <a href="/agents/" aria-current="page">Agents</a>
-        </nav>
-      </div>
-    </header>
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nine AI Agents - IE Business School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d6e3ff",
+                        "surface": "#fbf9fb",
+                        "surface-container": "#efedf0",
+                        "on-primary-fixed": "#071c36",
+                        "outline-variant": "#c4c6ce",
+                        "surface-bright": "#fbf9fb",
+                        "outline": "#75777e",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#eebd94",
+                        "secondary-fixed": "#ffdad8",
+                        "tertiary-container": "#321800",
+                        "cyan": "#00D4FF",
+                        "primary-fixed-dim": "#b5c7ea",
+                        "surface-container-highest": "#e4e2e5",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e4e2e5",
+                        "secondary": "#b52330",
+                        "primary-container": "#0b1f3a",
+                        "divider-gray": "#E5E5E1",
+                        "secondary-container": "#ff5a5f",
+                        "surface-tint": "#4d5f7d",
+                        "on-secondary-container": "#60000e",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#364764",
+                        "on-secondary-fixed-variant": "#92001b",
+                        "on-error-container": "#93000a",
+                        "background": "#fbf9fb",
+                        "surface-container-high": "#e9e7ea",
+                        "tertiary": "#0d0400",
+                        "off-white": "#FAF9F6",
+                        "secondary-fixed-dim": "#ffb3b0",
+                        "surface-container-low": "#f5f3f6",
+                        "on-surface": "#1b1b1e",
+                        "on-surface-variant": "#44474d",
+                        "on-tertiary-fixed-variant": "#613f20",
+                        "tertiary-fixed": "#ffdcc1",
+                        "on-background": "#1b1b1e",
+                        "primary": "#000615",
+                        "on-tertiary-fixed": "#2e1500",
+                        "inverse-on-surface": "#f2f0f3",
+                        "on-secondary-fixed": "#410007",
+                        "surface-dim": "#dbd9dc",
+                        "graphite": "#1A1A1A",
+                        "inverse-primary": "#b5c7ea",
+                        "on-tertiary-container": "#a87e59",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#303033",
+                        "sky-blue": "#1E9FE8",
+                        "on-primary-container": "#7587a7",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "content-max-width": "1200px",
+                        "stack-sm": "8px",
+                        "section-band": "160px",
+                        "margin-safe": "40px",
+                        "stack-md": "24px",
+                        "gutter": "32px",
+                        "stack-lg": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "code-snippet": ["Inter"],
+                        "headline-agent": ["Manrope"],
+                        "body-md": ["Inter"],
+                        "display-hero-mobile": ["Manrope"],
+                        "display-hero": ["Manrope"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "code-snippet": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "headline-agent": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-hero-mobile": ["40px", { "lineHeight": "1.1", "fontWeight": "800" }],
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<link href="/agents/stats-embed.css" rel="stylesheet"/>
+</head>
+<body class="bg-off-white text-on-background font-body-md min-h-screen flex flex-col pt-20 lg:pl-24">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-safe h-20 max-w-content-max-width mx-auto bg-off-white/80 backdrop-blur-md hidden md:flex">
+<div class="flex items-center h-full">
+    <div class="h-8">
+        <img src="/img/ie-logo.svg" alt="IE Business School" class="h-8 w-auto" />
+    </div>
+</div>
+<div class="flex items-center space-x-gutter">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Experience</a>
+<a class="font-label-caps text-label-caps text-secondary font-bold border-b-2 border-secondary pb-1 transition-colors duration-200" href="#">The Agents</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Technology</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Transparency</a>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-4 py-2 rounded-xl hover:opacity-90 transition-opacity">Apply Now</button>
+</div>
+</nav>
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 h-[calc(100vh-80px)] w-24 py-8 items-center space-y-stack-md bg-surface border-r border-divider-gray">
+<div aria-label="IE Business School Logo" class="font-headline-agent text-primary mb-4 w-12 h-12 flex items-center justify-center bg-primary-container rounded-full text-on-primary-container text-xs font-bold">IE</div>
+<div class="flex flex-col space-y-4">
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-01" title="01 Explorer"><span class="material-symbols-outlined">explore</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-02" title="02 Chatbot"><span class="material-symbols-outlined">forum</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-03" title="03 Voice"><span class="material-symbols-outlined">mic</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-04" title="04 Avatar"><span class="material-symbols-outlined">face</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-05" title="05 Art Designer"><span class="material-symbols-outlined">palette</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-06" title="06 Analytics"><span class="material-symbols-outlined">analytics</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-07" title="07 Email"><span class="material-symbols-outlined">mail</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-08" title="08 WhatsApp"><span class="material-symbols-outlined">chat</span></a>
+<a class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all" href="#agent-09" title="09 SMS"><span class="material-symbols-outlined">sms</span></a>
+</div>
+</aside>
+<main class="flex-grow w-full max-w-content-max-width mx-auto">
+<!-- Hero Section -->
+<section class="py-section-band px-margin-safe flex flex-col items-center text-center">
+<h1 class="font-display-hero-mobile md:font-display-hero text-display-hero-mobile md:text-display-hero text-primary mb-stack-md max-w-4xl">
+                Nine AI agents. One admissions experience.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-stack-lg">
+                From the page-crawler that learns IE inside-out to the SMS that lands at the perfect moment — meet the team that quietly builds your moment.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-secondary-container text-on-secondary-container font-body-md text-body-md px-8 py-4 rounded-xl hover:opacity-90 transition-opacity shadow-[0_4px_14px_0_rgba(255,90,95,0.39)]">
+                    Talk to the Advisor
+                </button>
+<button class="border border-primary text-primary font-body-md text-body-md px-8 py-4 rounded-xl hover:bg-surface-container-lowest transition-colors">
+                    See how it works
+                </button>
+</div>
+</section>
+<!-- Agent Index Strip -->
+<section class="w-full border-y border-divider-gray bg-surface-container-lowest overflow-x-auto">
+<div class="flex min-w-max">
+<div class="px-6 py-4 border-b-2 border-primary text-secondary-container font-label-caps text-label-caps cursor-pointer">
+<span class="text-outline-variant mr-2">01</span>Explorer
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">02</span>Chatbot
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">03</span>Voice
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">04</span>Avatar
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">05</span>Art Designer
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">06</span>Analytics
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">07</span>Email
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">08</span>WhatsApp
+                </div>
+<div class="px-6 py-4 text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors cursor-pointer">
+<span class="text-outline-variant mr-2">09</span>SMS
+                </div>
+</div>
+</section>
+<!-- AGENT 01 Explorer -->
+<section class="py-section-band px-margin-safe grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center" id="agent-01">
+<div class="order-2 lg:order-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="font-label-caps text-label-caps text-outline">AGENT 01</span>
+<span class="px-2 py-1 bg-cyan/10 text-cyan rounded-full font-label-caps text-label-caps">LIVE</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary mb-stack-md">Explorer</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg border-l-2 border-primary pl-4">
+                    Crawls IE's program pages and turns them into a structured knowledge base.
+                </p>
+<!-- Under the Hood Card -->
+<div class="bg-surface-container-lowest border border-divider-gray rounded-lg p-6">
+<h3 class="font-label-caps text-label-caps text-primary mb-4 pb-2 border-b border-divider-gray">Under the Hood</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Strategy</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Offline ingestion at build</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Source</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">combined.md + programs.jsonl</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Coverage</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">23 IE master programs</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Cache</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Prompt-cached in Claude system</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-label-caps text-label-caps text-outline">Location</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">lib/kb.js</span>
+</div>
+<div class="flex justify-between items-start py-2 border-t border-divider-gray/50 mt-2">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.00 / request</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">One-time cost at build</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+<div class="relative w-full max-w-md aspect-square rounded-xl overflow-hidden shadow-[0_10px_40px_-10px_rgba(11,31,58,0.15)] border border-outline-variant/30">
+<img alt="" class="w-full h-full object-cover" src="/img/agents/explorer.png">
+</div>
+</div>
+</section>
+<!-- AGENT 02 Chatbot -->
+<section class="py-section-band px-margin-safe grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center bg-surface-container-low" id="agent-02">
+<div class="order-1 lg:order-1 flex justify-center lg:justify-start">
+<div class="relative w-full max-w-md aspect-square rounded-xl overflow-hidden shadow-[0_10px_40px_-10px_rgba(11,31,58,0.15)] border border-outline-variant/30">
+<img alt="" class="w-full h-full object-cover" src="/img/agents/chatbot.png">
+</div>
+</div>
+<div class="order-2 lg:order-2">
+<div class="flex items-center gap-2 mb-4">
+<span class="font-label-caps text-label-caps text-outline">AGENT 02</span>
+<span class="px-2 py-1 bg-cyan/10 text-cyan rounded-full font-label-caps text-label-caps">LIVE</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary mb-stack-md">Chatbot</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg border-l-2 border-primary pl-4">
+                    Answers admissions questions in natural language, grounded in knowledge.
+                </p>
+<!-- Under the Hood Card -->
+<div class="bg-surface-container-lowest border border-divider-gray rounded-lg p-6">
+<h3 class="font-label-caps text-label-caps text-primary mb-4 pb-2 border-b border-divider-gray">Under the Hood</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Provider</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Anthropic</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Model</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Claude Haiku 4.5</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Streaming</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Server-Sent Events</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Cache</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">50–60K-token KB, ephemeral</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-label-caps text-label-caps text-outline">Profile</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Postgres, injected post-cache</span>
+</div>
+<div class="flex justify-between items-start py-2 border-t border-divider-gray/50 mt-2">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.0001 / question</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Cache hit · €0.05 cache miss</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- AGENT 03 Voice -->
+<section class="py-section-band px-margin-safe grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center" id="agent-03">
+<div class="order-2 lg:order-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="font-label-caps text-label-caps text-outline">AGENT 03</span>
+<span class="px-2 py-1 bg-cyan/10 text-cyan rounded-full font-label-caps text-label-caps">BETA</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary mb-stack-md">Voice</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg border-l-2 border-primary pl-4">
+                    Listens with Whisper and replies with ElevenLabs — full voice-to-voice chat.
+                </p>
+<!-- Under the Hood Card -->
+<div class="bg-surface-container-lowest border border-divider-gray rounded-lg p-6">
+<h3 class="font-label-caps text-label-caps text-primary mb-4 pb-2 border-b border-divider-gray">Under the Hood</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">STT</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">OpenAI whisper-1</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">TTS</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">ElevenLabs eleven_flash_v2_5</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Voice</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Rachel · ~75ms TTFB</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-outline">Audio</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">webm / ogg / m4a</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-label-caps text-label-caps text-outline">Pattern</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Stream-through chain</span>
+</div>
+<div class="flex justify-between items-start py-2 border-t border-divider-gray/50 mt-2">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">STT €0.0055/min</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">TTS €0.05 per ~200-char reply</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+<div class="relative w-full max-w-md aspect-square rounded-xl overflow-hidden shadow-[0_10px_40px_-10px_rgba(11,31,58,0.15)] border border-outline-variant/30">
+<img alt="" class="w-full h-full object-cover" src="/img/agents/voice.png">
+</div>
+</div>
+</section>
 
-    <main id="top">
-      <aside class="demo-disclaimer" role="note" aria-label="Demo disclaimer">
-        <div class="container demo-disclaimer-inner">
-          <strong>Demo notice.</strong>
-          This is a demo page designed for learning purposes only. It is
-          <strong>not affiliated with or endorsed by IE Business School</strong>.
-          Any data you submit will not be used for commercial or marketing
-          purposes and will be deleted within 24 hours.
+<!-- ===== Part 2 (Agents 04-06) ===== -->
+
+<div class="max-w-content-max-width mx-auto px-margin-safe pb-section-band">
+<!-- Index Strip -->
+<div class="flex flex-wrap justify-center gap-4 py-12 border-b border-divider-gray mb-16">
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">01 Explorer</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">02 Chatbot</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">03 Voice</div>
+<div class="font-label-caps text-label-caps text-secondary-container px-3 py-2 border-b-2 border-primary">04 Avatar</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">05 Art Designer</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">06 Analytics</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">07 Email</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">08 WhatsApp</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant px-3 py-2 border-b-2 border-transparent">09 SMS</div>
+</div>
+<!-- AGENT 04 Avatar Section -->
+<section id="agent-04" class="py-section-band border-b border-divider-gray">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<!-- Content (Left) -->
+<div class="space-y-stack-md pr-8">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-cyan/10 text-cyan border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan mr-2"></span>
+<span class="font-label-caps text-label-caps">Live</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">Avatar</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Brings answers to life with a HeyGen live avatar that reacts in real time.</p>
+<!-- Under the Hood Card -->
+<div class="bg-surface rounded-lg border border-divider-gray overflow-hidden mt-8">
+<div class="bg-surface-container-low px-6 py-4 border-b border-divider-gray flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Under the Hood</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Provider</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">HeyGen LiveAvatar</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">API</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">POST /v1/sessions/token</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Default avatar</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Wayne · server-minted</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Concurrency</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">1 · auto-stops orphans</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Sync</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Shares stream with Voice</span>
+</div>
+<div class="flex justify-between items-start pt-3 mt-3 border-t border-divider-gray/50">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.14 / minute</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Live avatar session ($0.0025/sec)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-6">
+<button class="bg-secondary-container text-on-secondary-container px-6 py-3 rounded-xl font-body-md text-body-md hover:bg-secondary-container/90 transition-colors">Start Conversation</button>
+</div>
+</div>
+<!-- Visual (Right) -->
+<div class="relative w-full aspect-square bg-surface border border-divider-gray rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,6,21,0.15)]">
+<img alt="Avatar Visual Placeholder" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90" src="/img/agents/avatar.png">
+<div class="absolute inset-0 border border-primary/5 rounded-xl pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- AGENT 05 Art Designer Section -->
+<section id="agent-05" class="py-section-band border-b border-divider-gray">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<!-- Visual (Left) -->
+<div class="order-2 md:order-1 relative w-full aspect-square bg-surface border border-divider-gray rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,6,21,0.15)]">
+<img alt="Art Designer Visual Placeholder" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90" src="/img/agents/art-designer.png">
+<div class="absolute inset-0 border border-primary/5 rounded-xl pointer-events-none"></div>
+</div>
+<!-- Content (Right) -->
+<div class="order-1 md:order-2 space-y-stack-md pl-0 md:pl-8">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-cyan/10 text-cyan border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan mr-2"></span>
+<span class="font-label-caps text-label-caps">Live</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">Art Designer</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Generates personalized banners with Gemini and 8-second reels with Veo 3.1.</p>
+<!-- Under the Hood Card -->
+<div class="bg-surface rounded-lg border border-divider-gray overflow-hidden mt-8">
+<div class="bg-surface-container-low px-6 py-4 border-b border-divider-gray flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Under the Hood</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Banner</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">gemini-3-pro-image-preview · 1200×628</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Reel</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">veo-3.1-fast-generate-preview · 8s vertical</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Composite</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Portrait + IE logo on 720×1280 navy</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Async</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Poll operationName until done</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Storage</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Vercel Blob /creatives/{email}/</span>
+</div>
+<div class="flex justify-between items-start pt-3 mt-3 border-t border-divider-gray/50">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.14 banner · €1.10 reel</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Gemini €0.14/img · Veo €0.138/sec × 8s</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-6">
+<button class="bg-transparent border border-primary text-primary px-6 py-3 rounded-xl font-body-md text-body-md hover:bg-surface-container-low transition-colors">See how it works</button>
+</div>
+</div>
+</div>
+</section>
+<!-- AGENT 06 Analytics Section -->
+<section id="agent-06" class="py-section-band border-b border-divider-gray">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<!-- Content (Left) -->
+<div class="space-y-stack-md pr-8">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-cyan/10 text-cyan border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan mr-2"></span>
+<span class="font-label-caps text-label-caps">Cache Hit</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">Analytics</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Tracks every model call, surfacing live token usage and EUR spend.</p>
+<!-- Under the Hood Card -->
+<div class="bg-surface rounded-lg border border-divider-gray overflow-hidden mt-8">
+<div class="bg-surface-container-low px-6 py-4 border-b border-divider-gray flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Under the Hood</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Backend</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">lib/usage.js + lib/pricing.js</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Storage</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Postgres (Neon) · PostHog events</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Logs</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">tokens, chars, audio sec, latency</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-divider-gray/50">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Pricing</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Per-model unit table · cached @ 0.1×</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Dashboard</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">/api/stats · 60s response cache</span>
+</div>
+<div class="flex justify-between items-start pt-3 mt-3 border-t border-divider-gray/50">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.00 / call</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Self-hosted, no external API</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-6">
+<button class="bg-transparent border border-primary text-primary px-6 py-3 rounded-xl font-body-md text-body-md hover:bg-surface-container-low transition-colors">See how it works</button>
+</div>
+</div>
+<!-- Visual (Right) -->
+<div class="relative w-full aspect-square bg-surface border border-divider-gray rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,6,21,0.15)]">
+<img alt="Data Analytics Visual Placeholder" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90" src="/img/agents/data-analytics.png">
+<div class="absolute inset-0 border border-primary/5 rounded-xl pointer-events-none"></div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- ===== Part 3 (Agents 07-09 + CTA + Footer) ===== -->
+
+<div class="max-w-content-max-width mx-auto px-margin-safe pb-section-band">
+<!-- AGENT 07 Email -->
+<section id="agent-07" class="py-section-band border-b border-divider-gray relative">
+<div class="grid md:grid-cols-2 gap-gutter items-center">
+<div class="space-y-stack-md order-2 md:order-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan/10 border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-cyan">Live</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">Email</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Delivers your moment to your inbox. The Email Agent sends your personal banner or reel with a note written for you — not a template.</p>
+<div class="bg-surface rounded-lg border border-divider-gray p-stack-sm overflow-hidden mt-stack-md">
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Provider</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Resend</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Endpoint</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">POST /emails · Bearer auth</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Personalization</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">First name + latest creative</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Trigger</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Per-row + bulk admin actions</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Why</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">No SMTP, instant deliverability</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-t border-divider-gray bg-secondary-container/5">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.0004 / email</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Resend pricing</div>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2 flex justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface to-off-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-divider-gray -z-10 transform translate-x-4 translate-y-4"></div>
+<img alt="Agent 07 Email — your moment delivered" class="rounded-xl border border-divider-gray w-full max-w-md shadow-sm" src="/img/agents/email.png">
+</div>
+</div>
+</section>
+<!-- AGENT 08 WhatsApp -->
+<section id="agent-08" class="py-section-band border-b border-divider-gray relative">
+<div class="grid md:grid-cols-2 gap-gutter items-center">
+<div class="flex justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-bl from-surface to-off-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-divider-gray -z-10 transform -translate-x-4 translate-y-4"></div>
+<img alt="Agent 08 WhatsApp — your moment in chat" class="rounded-xl border border-divider-gray w-full max-w-md shadow-sm" src="/img/agents/whatsapp.png">
+</div>
+<div class="space-y-stack-md">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan/10 border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-cyan">Live</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">WhatsApp</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Meets you where you already chat. Drops your personalized banner or reel into the conversation you check every day — short, warm, on time.</p>
+<div class="bg-surface rounded-lg border border-divider-gray p-stack-sm overflow-hidden mt-stack-md">
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Provider</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Twilio WhatsApp Business</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Endpoint</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Messages.json · whatsapp: prefix</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Auth</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">API Key SID/Secret · Account SID fallback</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Numbers</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">E.164 normalization</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Payload</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Text + signed Vercel Blob URL</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-t border-divider-gray bg-secondary-container/5">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.005–€0.015 / message</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Twilio · varies by country</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- AGENT 09 SMS -->
+<section id="agent-09" class="py-section-band relative">
+<div class="grid md:grid-cols-2 gap-gutter items-center">
+<div class="space-y-stack-md order-2 md:order-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan/10 border border-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-cyan">Live</span>
+</div>
+<h2 class="font-headline-agent text-headline-agent text-primary">SMS</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Short, direct, impossible to miss. For the highest-intent moments, the SMS Agent reaches your phone with a one-line message and a link to your creative.</p>
+<div class="bg-surface rounded-lg border border-divider-gray p-stack-sm overflow-hidden mt-stack-md">
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Provider</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Twilio SMS</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Endpoint</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">Messages.json · no prefix</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Sender</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">TWILIO_FROM_SMS env</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-b border-divider-gray">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Format</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">One sentence + link</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Usage</span>
+<span class="font-body-md text-body-md text-primary font-medium text-right">High-intent moments only</span>
+</div>
+<div class="grid grid-cols-2 gap-x-gutter py-2 px-4 border-t border-divider-gray bg-secondary-container/5">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary self-center">Price</span>
+<div class="text-right">
+<div class="font-body-md text-body-md text-primary font-semibold">€0.0073 / SMS</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Twilio US baseline</div>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2 flex justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface to-off-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-divider-gray -z-10 transform translate-x-4 translate-y-4"></div>
+<img alt="Agent 09 SMS — lock-screen ready" class="rounded-xl border border-divider-gray w-full max-w-md shadow-sm" src="/img/agents/sms.png">
+</div>
+</div>
+</section>
+
+<!-- LIVE STATS -->
+<section id="stats" class="py-section-band px-margin-safe">
+<div class="text-center mb-stack-lg max-w-3xl mx-auto">
+<span class="font-label-caps text-label-caps text-secondary">LIVE TELEMETRY</span>
+<h2 class="font-headline-agent text-headline-agent text-primary mt-stack-sm">The nine agents, in numbers.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-stack-md">
+                Every model call, every euro spent. Rolling window — data starts when usage logging shipped.
+            </p>
+<div class="stats-window-tabs" role="tablist" aria-label="Time window">
+<button data-window="24h" type="button">24h</button>
+<button data-window="7d" type="button">7 days</button>
+<button data-window="30d" type="button" aria-selected="true">30 days</button>
+<button data-window="all" type="button">All time</button>
+</div>
+</div>
+<div id="stats-kpi" class="stats-kpi" aria-live="polite"></div>
+<div class="stats-charts">
+<figure class="stats-card">
+<figcaption>Cost share by provider</figcaption>
+<div class="stats-canvas-wrap"><canvas id="stats-donut"></canvas></div>
+</figure>
+<figure class="stats-card">
+<figcaption>Cost by model (€)</figcaption>
+<div class="stats-canvas-wrap"><canvas id="stats-bar-model"></canvas></div>
+</figure>
+<figure class="stats-card stats-card-wide">
+<figcaption>Daily spend (€)</figcaption>
+<div class="stats-canvas-wrap"><canvas id="stats-line"></canvas></div>
+</figure>
+<figure class="stats-card">
+<figcaption>Tokens in vs out</figcaption>
+<div class="stats-canvas-wrap"><canvas id="stats-stacked"></canvas></div>
+</figure>
+</div>
+<div class="stats-table-wrap">
+<table id="stats-table" class="stats-table">
+<thead>
+<tr>
+<th data-sort="model">Model</th>
+<th data-sort="provider">Provider</th>
+<th data-sort="surface">Surface</th>
+<th class="num" data-sort="calls">Calls</th>
+<th class="num" data-sort="input_tokens">Input tok</th>
+<th class="num" data-sort="output_tokens">Output tok</th>
+<th class="num" data-sort="cost_eur" aria-sort="descending">Cost (€)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p id="stats-empty" class="stats-empty" hidden>No data yet — use the demo and the charts will populate within ~60s.</p>
+</div>
+</section>
+</div>
+
+</main>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-safe flex flex-col md:flex-row justify-between items-center border-t border-outline-variant bg-primary text-on-primary ml-0 lg:ml-24">
+<div class="text-on-primary font-headline-lg mb-4 md:mb-0">
+            IE
         </div>
-      </aside>
-
-      <section class="hero hero-compact">
-        <div class="container hero-inner">
-          <p class="eyebrow">Behind the demo</p>
-          <h1>Meet the AI Agents</h1>
-          <p class="lede">
-            Every part of this demo is powered by a small, specialized AI agent. Tap one
-            to try the feature it represents — or peek at what's coming next.
-          </p>
+<div class="font-body-md text-body-md text-on-primary/70 mb-4 md:mb-0 text-center md:text-left">
+            © 2024 IE Business School. Powered by Nine AI Agents.
         </div>
-      </section>
+<div class="flex flex-wrap justify-center md:justify-end gap-4 font-label-caps text-label-caps">
+<a class="text-on-primary/70 hover:text-on-primary hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:opacity-80 transition-opacity" href="#">Technical Whitepaper</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:opacity-80 transition-opacity" href="#">Accessibility</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:opacity-80 transition-opacity" href="#">Contact Support</a>
+</div>
+</footer>
 
-      <section class="agents-section">
-        <div class="container">
-          <ul class="agents-grid" role="list">
-            <li class="agent-card">
-              <a class="agent-card-link" href="/#programs">
-                <span class="agent-card-media">
-                  <img src="/img/agents/explorer.png" alt="" loading="lazy" />
-                </span>
-                <h3>Explorer Agent</h3>
-                <p>Crawls IE program pages and turns them into a structured knowledge base the chatbot can search.</p>
-              </a>
-            </li>
 
-            <li class="agent-card">
-              <a class="agent-card-link" href="/?open=chat" data-open-chat-link>
-                <span class="agent-card-media">
-                  <img src="/img/agents/chatbot.png" alt="" loading="lazy" />
-                </span>
-                <h3>Chatbot Agent</h3>
-                <p>Answers admissions questions in natural language, grounded in the knowledge base.</p>
-              </a>
-            </li>
-
-            <li class="agent-card">
-              <a class="agent-card-link" href="/?open=chat&amp;mode=voice" data-open-chat-link>
-                <span class="agent-card-media">
-                  <img src="/img/agents/voice.png" alt="" loading="lazy" />
-                </span>
-                <h3>Voice Agent</h3>
-                <p>Listens to you with Whisper and replies out loud with ElevenLabs — full voice-to-voice chat.</p>
-              </a>
-            </li>
-
-            <li class="agent-card">
-              <a class="agent-card-link" href="/?open=chat&amp;mode=avatar" data-open-chat-link>
-                <span class="agent-card-media">
-                  <img src="/img/agents/avatar.png" alt="" loading="lazy" />
-                </span>
-                <h3>Avatar Agent</h3>
-                <p>Brings answers to life with a HeyGen live avatar that speaks and reacts in real time.</p>
-              </a>
-            </li>
-
-            <li class="agent-card">
-              <a class="agent-card-link" href="/#gallery">
-                <span class="agent-card-media">
-                  <img src="/img/agents/art-designer.png" alt="" loading="lazy" />
-                </span>
-                <h3>Art Designer Agent</h3>
-                <p>Generates personalized banners with Gemini Nano Banana Pro and 8-second reels with Veo 3.1.</p>
-              </a>
-            </li>
-
-            <li class="agent-card">
-              <a class="agent-card-link" href="/#stats">
-                <span class="agent-card-media">
-                  <img src="/img/agents/data-analytics.png" alt="" loading="lazy" />
-                </span>
-                <h3>Data Analytics Agent</h3>
-                <p>Tracks every model call, surfaces live token usage and EUR spend across all providers.</p>
-              </a>
-            </li>
-
-            <li class="agent-card is-soon">
-              <div class="agent-card-link" aria-disabled="true">
-                <span class="agent-badge">Coming soon</span>
-                <span class="agent-card-media">
-                  <img src="/img/agents/translator.png" alt="" loading="lazy" />
-                </span>
-                <h3>Translator Agent</h3>
-                <p>Multilingual answers and live interpretation so every prospective student can chat in their own language.</p>
-              </div>
-            </li>
-
-            <li class="agent-card is-soon">
-              <div class="agent-card-link" aria-disabled="true">
-                <span class="agent-badge">Coming soon</span>
-                <span class="agent-card-media">
-                  <img src="/img/agents/career-coach.png" alt="" loading="lazy" />
-                </span>
-                <h3>Career Coach Agent</h3>
-                <p>Maps your background to program outcomes and suggests next career moves backed by alumni data.</p>
-              </div>
-            </li>
-
-            <li class="agent-card is-soon">
-              <div class="agent-card-link" aria-disabled="true">
-                <span class="agent-badge">Coming soon</span>
-                <span class="agent-card-media">
-                  <img src="/img/agents/application-assistant.png" alt="" loading="lazy" />
-                </span>
-                <h3>Application Assistant</h3>
-                <p>Walks you through admissions documents, deadlines, and scholarships — and checks your draft.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <p>
-          This is a demo interface built on top of public IE Business School content. For official
-          admissions information, visit
-          <a href="https://www.ie.edu" target="_blank" rel="noopener">ie.edu</a>.
-        </p>
-        <p class="footer-admin">
-          <a href="/">Home</a>
-          <span aria-hidden="true">·</span>
-          <a href="/admin/creatives.html">Admin</a>
-        </p>
-      </div>
-    </footer>
-  </body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js" defer></script>
+<script src="/stats.js" defer></script>
+</body></html>

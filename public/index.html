@@ -322,60 +322,6 @@
         </div>
       </section>
 
-      <section id="stats" class="section">
-        <div class="container">
-          <header class="section-head">
-            <h2>Stats</h2>
-            <p class="section-lead">
-              Live telemetry — how many AI calls this demo has made, what each
-              provider has cost in real euros, and which models pull the most weight.
-              Rolling window; data starts when usage logging shipped.
-            </p>
-            <div class="stats-window-tabs" role="tablist" aria-label="Time window">
-              <button data-window="24h" type="button">24h</button>
-              <button data-window="7d"  type="button">7 days</button>
-              <button data-window="30d" type="button" aria-selected="true">30 days</button>
-              <button data-window="all" type="button">All time</button>
-            </div>
-          </header>
-          <div id="stats-kpi" class="stats-kpi" aria-live="polite"></div>
-          <div class="stats-charts">
-            <figure class="stats-card">
-              <figcaption>Cost share by provider</figcaption>
-              <div class="stats-canvas-wrap"><canvas id="stats-donut"></canvas></div>
-            </figure>
-            <figure class="stats-card">
-              <figcaption>Cost by model (€)</figcaption>
-              <div class="stats-canvas-wrap"><canvas id="stats-bar-model"></canvas></div>
-            </figure>
-            <figure class="stats-card stats-card-wide">
-              <figcaption>Daily spend (€)</figcaption>
-              <div class="stats-canvas-wrap"><canvas id="stats-line"></canvas></div>
-            </figure>
-            <figure class="stats-card">
-              <figcaption>Tokens in vs out</figcaption>
-              <div class="stats-canvas-wrap"><canvas id="stats-stacked"></canvas></div>
-            </figure>
-          </div>
-          <div class="stats-table-wrap">
-            <table id="stats-table" class="stats-table">
-              <thead>
-                <tr>
-                  <th data-sort="model">Model</th>
-                  <th data-sort="provider">Provider</th>
-                  <th data-sort="surface">Surface</th>
-                  <th class="num" data-sort="calls">Calls</th>
-                  <th class="num" data-sort="input_tokens">Input tok</th>
-                  <th class="num" data-sort="output_tokens">Output tok</th>
-                  <th class="num" data-sort="cost_eur" aria-sort="descending">Cost (€)</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-            <p id="stats-empty" class="stats-empty" hidden>No data yet — use the demo and the charts will populate within ~60s.</p>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -606,7 +552,5 @@
     <script src="gallery.js" defer></script>
     <script src="reels.js" defer></script>
     <script src="lightbox.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js" defer></script>
-    <script src="stats.js" defer></script>
   </body>
 </html>

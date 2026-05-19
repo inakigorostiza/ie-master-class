@@ -1,0 +1,242 @@
+/* Stats section CSS, ported from /styles.css and scoped under #stats so it
+   coexists with the agents page's Tailwind design system without leaking. */
+#stats {
+  --ie-navy: #001F5C;
+  --ie-sky: #1E9FE8;
+  --ie-cyan: #00D4FF;
+  --ie-red: #E8002C;
+  --ie-bg: #F5F5F5;
+  --ie-surface: #ffffff;
+  --ie-ink: #14152e;
+  --ie-ink-2: #4a4d57;
+  --ie-line: #e3e6ed;
+  --ie-muted: #eef0f5;
+  --radius-sm: 10px;
+}
+
+/* Re-expose tokens at :root too, because stats.js reads them off
+   getComputedStyle(document.documentElement). The fallbacks in stats.js
+   match these values, but defining them keeps Chart.js + the CSS rules
+   visually identical to the old landing. */
+:root {
+  --ie-navy: #001F5C;
+  --ie-sky: #1E9FE8;
+  --ie-cyan: #00D4FF;
+  --ie-red: #E8002C;
+  --ie-ink: #14152e;
+  --ie-ink-2: #4a4d57;
+  --ie-line: #e3e6ed;
+}
+
+#stats .stats-window-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+#stats .stats-window-tabs button {
+  appearance: none;
+  background: var(--ie-surface);
+  color: var(--ie-ink-2);
+  border: 1px solid var(--ie-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+#stats .stats-window-tabs button:hover {
+  border-color: var(--ie-navy);
+  color: var(--ie-navy);
+}
+
+#stats .stats-window-tabs button[aria-selected="true"] {
+  background: var(--ie-navy);
+  color: #fff;
+  border-color: var(--ie-navy);
+}
+
+#stats .stats-kpi {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+#stats .stats-kpi-card {
+  background: var(--ie-surface);
+  border: 1px solid var(--ie-line);
+  border-radius: var(--radius-sm);
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 96px;
+  position: relative;
+  overflow: hidden;
+}
+
+#stats .stats-kpi-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--ie-navy), var(--ie-sky));
+}
+
+#stats .stats-kpi-label {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ie-ink-2);
+}
+
+#stats .stats-kpi-value {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ie-navy);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+#stats .stats-kpi-sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ie-ink-2);
+}
+
+#stats .stats-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+#stats .stats-card {
+  background: var(--ie-surface);
+  border: 1px solid var(--ie-line);
+  border-radius: var(--radius-sm);
+  padding: 18px 18px 14px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+#stats .stats-card figcaption {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ie-ink-2);
+  font-weight: 700;
+}
+
+#stats .stats-card-wide {
+  grid-column: 1 / -1;
+}
+
+#stats .stats-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+#stats .stats-card-wide .stats-canvas-wrap {
+  height: 280px;
+}
+
+#stats .stats-table-wrap {
+  background: var(--ie-surface);
+  border: 1px solid var(--ie-line);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+#stats .stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 640px;
+}
+
+#stats .stats-table thead th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ie-ink-2);
+  font-weight: 700;
+  padding: 14px;
+  border-bottom: 1px solid var(--ie-line);
+  background: var(--ie-bg);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+#stats .stats-table thead th:hover { color: var(--ie-navy); }
+#stats .stats-table thead th[aria-sort="descending"]::after { content: " ▾"; color: var(--ie-navy); }
+#stats .stats-table thead th[aria-sort="ascending"]::after { content: " ▴"; color: var(--ie-navy); }
+
+#stats .stats-table th.num,
+#stats .stats-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#stats .stats-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--ie-line);
+  color: var(--ie-ink);
+  vertical-align: middle;
+}
+
+#stats .stats-table tbody tr:last-child td { border-bottom: none; }
+#stats .stats-table tbody tr:hover td { background: var(--ie-bg); }
+
+#stats .stats-table code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  background: var(--ie-muted);
+  color: var(--ie-navy);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#stats .stats-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+#stats .stats-empty {
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--ie-ink-2);
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  #stats .stats-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  #stats .stats-kpi { grid-template-columns: 1fr; }
+  #stats .stats-charts { grid-template-columns: 1fr; }
+  #stats .stats-card-wide { grid-column: 1; }
+  #stats .stats-canvas-wrap,
+  #stats .stats-card-wide .stats-canvas-wrap { height: 240px; }
+}
