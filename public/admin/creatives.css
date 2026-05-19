@@ -358,6 +358,10 @@ html, body {
   color: #fff;
   border-color: var(--ie-red);
 }
+.studio-bulk-btn-whatsapp { background: #25D366; color: #06241a; }
+.studio-bulk-btn-whatsapp:hover:not(:disabled) { background: #1eb958; }
+.studio-bulk-btn-sms { background: #475569; }
+.studio-bulk-btn-sms:hover:not(:disabled) { background: #334155; }
 
 .studio-bulk-progress {
   margin: 0;

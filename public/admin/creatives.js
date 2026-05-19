@@ -17,6 +17,8 @@
   const bulkCountEl = document.getElementById("studio-bulk-count-value");
   const bulkBannerBtn = document.getElementById("studio-bulk-banner");
   const bulkReelBtn = document.getElementById("studio-bulk-reel");
+  const bulkWhatsappBtn = document.getElementById("studio-bulk-whatsapp");
+  const bulkSmsBtn = document.getElementById("studio-bulk-sms");
   const bulkRemoveBtn = document.getElementById("studio-bulk-remove");
   const bulkProgressEl = document.getElementById("studio-bulk-progress");
   const selectAllEl = document.getElementById("studio-select-all");
@@ -37,6 +39,8 @@
   selectAllEl.addEventListener("change", onSelectAllChange);
   bulkBannerBtn.addEventListener("click", () => runBulk("banner"));
   bulkReelBtn.addEventListener("click", () => runBulk("reel"));
+  bulkWhatsappBtn.addEventListener("click", () => runBulk("whatsapp"));
+  bulkSmsBtn.addEventListener("click", () => runBulk("sms"));
   bulkRemoveBtn.addEventListener("click", () => runBulk("remove"));
 
 
@@ -441,6 +445,8 @@
     bulkToolbar.hidden = n === 0;
     bulkBannerBtn.textContent = `Regenerate banner${n ? ` (${n})` : ""}`;
     bulkReelBtn.textContent = `Generate reel${n ? ` (${n})` : ""}`;
+    bulkWhatsappBtn.textContent = `Send WhatsApp${n ? ` (${n})` : ""}`;
+    bulkSmsBtn.textContent = `Send SMS${n ? ` (${n})` : ""}`;
     bulkRemoveBtn.textContent = `Remove${n ? ` (${n})` : ""}`;
     const visibleEmails = Array.from(tbody.querySelectorAll("tr"))
       .map((tr) => tr.dataset.email)
@@ -523,6 +529,8 @@
           await onGenerateBanner(tr);
         } else if (kind === "reel" && tr) {
           await onGenerateReel(tr);
+        } else if ((kind === "whatsapp" || kind === "sms") && tr) {
+          await onSendMessage(tr, kind);
         } else if (kind === "remove") {
           if (tr) await onRemoveLead.callPath(tr);
           else await deleteLeadCreatives(email);
@@ -542,7 +550,7 @@
   }
 
   function setBulkButtonsDisabled(disabled) {
-    [bulkBannerBtn, bulkReelBtn, bulkRemoveBtn].forEach((b) => { b.disabled = disabled; });
+    [bulkBannerBtn, bulkReelBtn, bulkWhatsappBtn, bulkSmsBtn, bulkRemoveBtn].forEach((b) => { b.disabled = disabled; });
   }
 
   // Bulk-remove path that skips the per-row confirm (we've already confirmed once for the whole batch).
