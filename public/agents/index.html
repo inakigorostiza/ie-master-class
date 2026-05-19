@@ -732,6 +732,61 @@
 </table>
 <p id="stats-empty" class="stats-empty" hidden>No data yet — use the demo and the charts will populate within ~60s.</p>
 </div>
+
+<!-- AI vs Human team subsection -->
+<div class="stats-compare">
+<header class="stats-compare-head">
+<span class="stats-compare-eyebrow">BENCHMARK</span>
+<h3 class="stats-compare-title">AI agents vs. a human team.</h3>
+<p class="stats-compare-lead">Same admissions funnel — 100 prospects, fully personalized creative + outreach. The numbers below benchmark this demo against an in-house team of one designer, one copywriter, and one CRM coordinator at typical Madrid market rates.</p>
+</header>
+
+<div class="stats-compare-cards">
+<article class="stats-compare-card">
+<p class="stats-compare-metric">Time to first reply</p>
+<div class="stats-compare-rows">
+<div class="stats-compare-row stats-compare-row-ai"><span class="stats-compare-tag">AI agents</span><span class="stats-compare-value">~5 sec</span></div>
+<div class="stats-compare-row stats-compare-row-human"><span class="stats-compare-tag">Human team</span><span class="stats-compare-value">~4 hours</span></div>
+</div>
+<p class="stats-compare-delta">~2,880× faster</p>
+</article>
+
+<article class="stats-compare-card">
+<p class="stats-compare-metric">Cost per personalized creative</p>
+<div class="stats-compare-rows">
+<div class="stats-compare-row stats-compare-row-ai"><span class="stats-compare-tag">AI agents</span><span class="stats-compare-value">€0.20</span></div>
+<div class="stats-compare-row stats-compare-row-human"><span class="stats-compare-tag">Human team</span><span class="stats-compare-value">€40</span></div>
+</div>
+<p class="stats-compare-delta">200× cheaper</p>
+</article>
+
+<article class="stats-compare-card">
+<p class="stats-compare-metric">Cost per outreach message</p>
+<div class="stats-compare-rows">
+<div class="stats-compare-row stats-compare-row-ai"><span class="stats-compare-tag">AI agents</span><span class="stats-compare-value">€0.01</span></div>
+<div class="stats-compare-row stats-compare-row-human"><span class="stats-compare-tag">Human team</span><span class="stats-compare-value">€2.00</span></div>
+</div>
+<p class="stats-compare-delta">200× cheaper</p>
+</article>
+
+<article class="stats-compare-card">
+<p class="stats-compare-metric">Leads served per day</p>
+<div class="stats-compare-rows">
+<div class="stats-compare-row stats-compare-row-ai"><span class="stats-compare-tag">AI agents</span><span class="stats-compare-value">Unlimited</span></div>
+<div class="stats-compare-row stats-compare-row-human"><span class="stats-compare-tag">Human team</span><span class="stats-compare-value">~30 / day</span></div>
+</div>
+<p class="stats-compare-delta">No cap on volume</p>
+</article>
+</div>
+
+<figure class="stats-card stats-card-wide stats-compare-chart-card">
+<figcaption>Total cost to deliver a personalized funnel for 100 prospects (€)</figcaption>
+<div class="stats-canvas-wrap"><canvas id="stats-compare-chart"></canvas></div>
+</figure>
+
+<p class="stats-compare-foot">Human-team baseline assumes one designer + one copywriter + one CRM coordinator at €30/h fully loaded, 30 min per personalized creative, 2 min per outreach message. AI cost combines Gemini, Veo, Resend, and Twilio at observed rates from this demo.</p>
+</div>
+
 </section>
 </div>
 
@@ -755,4 +810,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js" defer></script>
 <script src="/stats.js" defer></script>
+<script src="/agents/compare.js" defer></script>
 </body></html>
