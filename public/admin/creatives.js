@@ -13,10 +13,6 @@
   const modalBody = document.getElementById("studio-modal-body");
   const modalClose = document.getElementById("studio-modal-close");
 
-  const lightbox = document.getElementById("studio-lightbox");
-  const lightboxMedia = document.getElementById("studio-lightbox-media");
-  const lightboxClose = document.getElementById("studio-lightbox-close");
-
   const bulkToolbar = document.getElementById("studio-bulk-toolbar");
   const bulkCountEl = document.getElementById("studio-bulk-count-value");
   const bulkBannerBtn = document.getElementById("studio-bulk-banner");
@@ -43,17 +39,6 @@
   bulkReelBtn.addEventListener("click", () => runBulk("reel"));
   bulkRemoveBtn.addEventListener("click", () => runBulk("remove"));
 
-  lightboxClose.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (e) => {
-    // Clicking the dialog backdrop closes; clicks on the media bubble up from
-    // inner elements, so close only when the dialog element itself was hit.
-    if (e.target === lightbox) closeLightbox();
-  });
-  lightbox.addEventListener("close", () => { lightboxMedia.innerHTML = ""; });
-
-  // Global click delegation: any anchor pointing at a creative inside the
-  // banner cell or the history modal opens the lightbox instead of a new tab.
-  document.addEventListener("click", onCreativeLinkClick, true);
 
   document.addEventListener("DOMContentLoaded", loadStudents);
   if (document.readyState !== "loading") loadStudents();
@@ -581,46 +566,4 @@
     return String(s).replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
   }
 
-  // ─── Creative lightbox ───────────────────────────────────────────────────
-
-  function onCreativeLinkClick(e) {
-    // Honor modifier clicks (open in new tab) and middle-click.
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const link = e.target.closest("a");
-    if (!link) return;
-    // Only intercept links inside the row banner cell or the history modal grid.
-    if (!link.closest(".studio-banner") && !link.closest(".studio-gallery-item")) return;
-    const url = link.getAttribute("href");
-    if (!url) return;
-    const inner = link.querySelector("video, img");
-    const isVideo = inner?.tagName === "VIDEO" || /\.(mp4|webm|mov)(\?|$)/i.test(url);
-    e.preventDefault();
-    openLightbox(url, isVideo ? "video" : "image");
-  }
-
-  function openLightbox(url, kind) {
-    lightboxMedia.innerHTML = "";
-    if (kind === "video") {
-      const v = document.createElement("video");
-      v.src = url;
-      v.controls = true;
-      v.autoplay = true;
-      v.playsInline = true;
-      v.loop = true;
-      lightboxMedia.appendChild(v);
-    } else {
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "";
-      lightboxMedia.appendChild(img);
-    }
-    if (typeof lightbox.showModal === "function") lightbox.showModal();
-    else lightbox.setAttribute("open", "");
-  }
-
-  function closeLightbox() {
-    if (typeof lightbox.close === "function") lightbox.close();
-    else lightbox.removeAttribute("open");
-    lightboxMedia.innerHTML = "";
-  }
 })();
