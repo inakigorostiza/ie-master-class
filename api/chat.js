@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { KB_TEXT, MODEL, SYSTEM_INSTRUCTIONS, allPrograms } from "../lib/kb.js";
+import { KB_TEXT, FILTERED_KB_TEXT, MODEL, SYSTEM_INSTRUCTIONS, allPrograms } from "../lib/kb.js";
 import { getSql } from "../lib/db.js";
 import { logUsage } from "../lib/usage.js";
 
@@ -111,6 +111,12 @@ export default async function handler(req, res) {
   const body = await readJsonBody(req);
   const messages = body?.messages;
   const studentEmail = body?.student_email;
+  // Pages set full_catalog=true (via window.SHOW_ALL_PROGRAMS on /all/) to
+  // unlock the entire 23-program KB. Default (/, /agents/) stays scoped
+  // to the 6-program FILTERED_KB_TEXT so the marketing demo doesn't
+  // surface dual degrees or executive masters in chat.
+  const useFullCatalog = body?.full_catalog === true;
+  const activeKb = useFullCatalog ? KB_TEXT : FILTERED_KB_TEXT;
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: "messages must be a non-empty array" });
@@ -153,7 +159,7 @@ export default async function handler(req, res) {
         max_tokens: 1024,
         system: [
           { type: "text", text: SYSTEM_INSTRUCTIONS },
-          { type: "text", text: KB_TEXT, cache_control: { type: "ephemeral" } },
+          { type: "text", text: activeKb, cache_control: { type: "ephemeral" } },
           // Per-user student profile (uncached) — placed AFTER the cache
           // breakpoint so the KB cache stays valid across all callers.
           ...(studentContext ? [{ type: "text", text: studentContext }] : []),
