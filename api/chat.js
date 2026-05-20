@@ -1,10 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { KB_TEXT, MODEL, SYSTEM_INSTRUCTIONS, programs } from "../lib/kb.js";
+import { KB_TEXT, MODEL, SYSTEM_INSTRUCTIONS, allPrograms } from "../lib/kb.js";
 import { getSql } from "../lib/db.js";
 import { logUsage } from "../lib/usage.js";
 
-// slug → human-readable program name (e.g. "master-in-big-data-…" → "Master in Big Data & …")
-const PROGRAM_NAME_BY_SLUG = new Map(programs.map((p) => [p.slug, p.name]));
+// slug → human-readable program name. Built from the full catalog so a
+// student who picked a dual-degree slug on /all/ still gets their program
+// name resolved here, even though the landing grid is allowlisted to 6.
+const PROGRAM_NAME_BY_SLUG = new Map(allPrograms.map((p) => [p.slug, p.name]));
 
 function buildStudentContext(s) {
   if (!s) return null;
