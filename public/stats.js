@@ -296,6 +296,68 @@
     });
   }
 
+  // Static fallback for the AI-vs-human cost hero when there's no usage
+  // data yet for the selected window. Matches the assumptions documented
+  // in compare.js and the .stats-compare-foot footnote.
+  const COMPARE_FALLBACK = {
+    eyebrow: "Illustrative scenario · 100 prospects · personalized creative + outreach",
+    human: "€1,750",
+    ai: "€24",
+    delta: "73× cheaper · €1,726 saved per 100 prospects",
+  };
+  // Human-cost model used to scale alongside actual AI spend: €30/h fully
+  // loaded × (30min creative + 5min copy + 2min message) ≈ €17.50 per
+  // personalized creative+outreach pair. Splitting it: €15 creative, €2.50
+  // outreach per message.
+  const HUMAN_PER_CREATIVE_EUR = 15;
+
+  const WINDOW_LABEL = {
+    "24h": "last 24 hours",
+    "7d": "last 7 days",
+    "30d": "last 30 days",
+    "all": "all time",
+  };
+
+  const eurFmt = new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  });
+
+  function renderCompareHero({ totals, bySurface, windowKey }) {
+    const eyebrowEl = document.getElementById("stats-compare-hero-eyebrow");
+    const humanEl = document.getElementById("stats-compare-hero-human");
+    const aiEl = document.getElementById("stats-compare-hero-ai");
+    const deltaEl = document.getElementById("stats-compare-hero-delta");
+    if (!eyebrowEl || !humanEl || !aiEl || !deltaEl) return;
+
+    // Count creatives generated in the window (banner + reel surfaces).
+    const surfaceMap = new Map(
+      (bySurface ?? []).map((s) => [s.surface, Number(s.calls) || 0])
+    );
+    const creatives = (surfaceMap.get("banner") ?? 0) + (surfaceMap.get("reel") ?? 0);
+    const aiCost = Number(totals?.cost_eur) || 0;
+
+    if (creatives === 0 || aiCost === 0) {
+      eyebrowEl.textContent = COMPARE_FALLBACK.eyebrow;
+      humanEl.textContent = COMPARE_FALLBACK.human;
+      aiEl.textContent = COMPARE_FALLBACK.ai;
+      deltaEl.textContent = COMPARE_FALLBACK.delta;
+      return;
+    }
+
+    const humanCost = creatives * HUMAN_PER_CREATIVE_EUR;
+    const ratio = humanCost / aiCost;
+    const saved = humanCost - aiCost;
+    const label = WINDOW_LABEL[windowKey] ?? "this window";
+
+    eyebrowEl.textContent = `Spend · ${label} · ${creatives} personalized creative${creatives === 1 ? "" : "s"} generated`;
+    humanEl.textContent = eurFmt.format(humanCost);
+    aiEl.textContent = eurFmt.format(aiCost);
+    const ratioText = ratio >= 10 ? `${Math.round(ratio)}×` : `${ratio.toFixed(1)}×`;
+    deltaEl.textContent = `${ratioText} cheaper · ${eurFmt.format(saved)} saved`;
+  }
+
   async function load(win = "30d") {
     setWindowTab(win);
     try {
@@ -312,6 +374,7 @@
       renderLine(json.daily ?? []);
       renderStacked(json.by_model ?? []);
       renderTable(json.by_model ?? []);
+      renderCompareHero({ totals, bySurface: json.by_surface, windowKey: win });
     } catch (err) {
       console.warn("[stats] load failed:", err);
       emptyEl.hidden = false;
