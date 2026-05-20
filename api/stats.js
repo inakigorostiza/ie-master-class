@@ -46,7 +46,8 @@ export default async function handler(req, res) {
           COALESCE(SUM(audio_seconds), 0)::numeric AS audio_seconds,
           COALESCE(SUM(image_count), 0)::int AS image_count,
           COALESCE(SUM(cost_usd), 0)::numeric AS cost_usd,
-          COALESCE(SUM(cost_eur), 0)::numeric AS cost_eur
+          COALESCE(SUM(cost_eur), 0)::numeric AS cost_eur,
+          COALESCE(AVG(latency_ms) FILTER (WHERE surface = 'chat'), 0)::int AS avg_chat_latency_ms
         FROM agent_usage WHERE ${sinceCondition}
       `,
       sql`

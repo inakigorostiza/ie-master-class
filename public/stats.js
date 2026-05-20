@@ -351,6 +351,14 @@
     if (el) el.textContent = value;
   }
 
+  function formatReplyTime(ms) {
+    if (!ms || ms <= 0) return "~5 sec";
+    if (ms < 1000) return `${ms} ms`;
+    const sec = ms / 1000;
+    if (sec < 60) return sec < 10 ? `${sec.toFixed(1)} sec` : `${Math.round(sec)} sec`;
+    return `${(sec / 60).toFixed(1)} min`;
+  }
+
   function renderCompare({ totals, bySurface, daily, windowKey }) {
     const surfaceMap = new Map(
       (bySurface ?? []).map((s) => [
@@ -360,9 +368,15 @@
     );
     const banner = surfaceMap.get("banner") ?? { calls: 0, cost: 0 };
     const reel = surfaceMap.get("reel") ?? { calls: 0, cost: 0 };
+    const email = surfaceMap.get("email") ?? { calls: 0, cost: 0 };
+    const sms = surfaceMap.get("sms") ?? { calls: 0, cost: 0 };
+    const whatsapp = surfaceMap.get("whatsapp") ?? { calls: 0, cost: 0 };
     const creatives = banner.calls + reel.calls;
     const creativeCost = banner.cost + reel.cost;
+    const outreachCalls = email.calls + sms.calls + whatsapp.calls;
+    const outreachCost = email.cost + sms.cost + whatsapp.cost;
     const aiTotal = Number(totals?.cost_eur) || 0;
+    const avgChatLatencyMs = Number(totals?.avg_chat_latency_ms) || 0;
 
     // ── Hero ──
     const eyebrowEl = document.getElementById("stats-compare-hero-eyebrow");
@@ -411,19 +425,34 @@
 
     // ── KPI cards (live) ──
 
-    // Cost per personalized creative.
+    // Card 1 — Time to first reply: avg latency_ms on chat surface from
+    // the new /api/stats field. Falls back to ~5 sec if no chat traffic.
+    if (avgChatLatencyMs > 0) {
+      setCmp("reply-ai", formatReplyTime(avgChatLatencyMs));
+      setCmp("reply-human", "~4 hours");
+      const humanMs = 4 * 60 * 60 * 1000;
+      setCmp("reply-delta", `${formatRatio(humanMs / avgChatLatencyMs)} faster`);
+    } else {
+      setCmp("reply-ai", "~5 sec");
+      setCmp("reply-human", "~4 hours");
+      setCmp("reply-delta", "~2,880× faster");
+    }
+
+    // Card 2 — Cost per personalized creative.
     const aiPerCreative = creativeCost / creatives;
     setCmp("creative-ai", eurFmt2.format(aiPerCreative));
     setCmp("creative-human", eurFmt0.format(HUMAN_PER_CREATIVE_EUR));
     setCmp("creative-delta", `${formatRatio(HUMAN_PER_CREATIVE_EUR / aiPerCreative)} cheaper`);
 
-    // Cost per outreach message — kept as a constant ratio because the
-    // email/SMS/WhatsApp adapters don't log to agent_usage today.
-    setCmp("outreach-ai", eurFmt2.format(AI_PER_OUTREACH_EUR));
+    // Card 3 — Cost per outreach message: now dynamic via the
+    // email/sms/whatsapp surfaces newly logged from api/admin.js. Falls
+    // back to per-unit Resend+Twilio estimate when no outreach yet.
+    const aiPerOutreach = outreachCalls > 0 ? outreachCost / outreachCalls : AI_PER_OUTREACH_EUR;
+    setCmp("outreach-ai", eurFmt2.format(aiPerOutreach));
     setCmp("outreach-human", eurFmt2.format(HUMAN_PER_OUTREACH_EUR));
     setCmp(
       "outreach-delta",
-      `${formatRatio(HUMAN_PER_OUTREACH_EUR / AI_PER_OUTREACH_EUR)} cheaper`,
+      `${formatRatio(HUMAN_PER_OUTREACH_EUR / aiPerOutreach)} cheaper`,
     );
 
     // Leads served per day — peak creative-day in the window.
@@ -448,12 +477,16 @@
     }
 
     // ── Chart (live) ──
-    // Outreach AI cost: estimate as creatives × AI_PER_OUTREACH_EUR
-    // (outreach not yet logged with cost). Total AI = real totals.cost_eur.
-    const aiOutreach = creatives * AI_PER_OUTREACH_EUR;
+    // Outreach AI cost: real spend from email/sms/whatsapp surfaces if any,
+    // otherwise estimated as creatives × AI_PER_OUTREACH_EUR. Total AI =
+    // real totals.cost_eur (includes chat/voice/avatar overhead too).
+    const aiOutreach = outreachCost > 0 ? outreachCost : creatives * AI_PER_OUTREACH_EUR;
     const aiCreative = creativeCost || aiPerCreative * creatives;
+    // Human side scales by outreach count when we have one, else by
+    // creatives (1 message per prospect baseline).
+    const outreachUnits = outreachCalls > 0 ? outreachCalls : creatives;
     const humanCreative = creatives * HUMAN_PER_CREATIVE_EUR;
-    const humanOutreach = creatives * HUMAN_PER_OUTREACH_EUR;
+    const humanOutreach = outreachUnits * HUMAN_PER_OUTREACH_EUR;
     window.__ieCompare?.update?.(
       [
         Math.max(0.01, aiCreative),

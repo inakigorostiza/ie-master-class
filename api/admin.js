@@ -4,6 +4,7 @@ import { put, del } from "@vercel/blob";
 import { getSql } from "../lib/db.js";
 import { getOperation, extractVideoFromResult, downloadVideoBytes } from "../lib/veo.js";
 import { sendEmail, sendSms, sendWhatsapp } from "../lib/messaging.js";
+import { logUsage } from "../lib/usage.js";
 
 export const config = { maxDuration: 30 };
 
@@ -411,6 +412,22 @@ async function sendToLead(sql, req, res, channel) {
   const programUrl = program?.url || null;
   const careerGoal = (row.career_goal_one_line || "").trim() || null;
 
+  // Fire-and-forget telemetry helper — logs one "message produced" row to
+  // agent_usage so the stats dashboard can compute outreach cost-per-call
+  // and total spend per window. Cost is derived from PRICING in lib/pricing.js.
+  const logSend = (model, latency_ms) => {
+    logUsage({
+      surface: channel,
+      model,
+      image_count: 1,
+      latency_ms,
+      student_email: row.email,
+      meta: { phone: row.phone_number ? "redacted" : null },
+    }).catch(() => {});
+  };
+
+  const t0 = Date.now();
+
   try {
     if (channel === "email") {
       const subject = programName
@@ -419,6 +436,7 @@ async function sendToLead(sql, req, res, channel) {
       const html = buildPersonalizedEmail({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal });
       const text = buildPersonalizedEmailText({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal });
       const { id } = await sendEmail({ to: row.email, subject, body: text, html });
+      logSend("resend-email", Date.now() - t0);
       return res.status(200).json({ ok: true, channel, provider_id: id });
     }
 
@@ -429,6 +447,7 @@ async function sendToLead(sql, req, res, channel) {
     if (channel === "whatsapp") {
       const waBody = buildPersonalizedWhatsapp({ firstName, bannerUrl, reelUrl, programName, programUrl });
       const { sid } = await sendWhatsapp({ to: row.phone_number, body: waBody });
+      logSend("twilio-whatsapp", Date.now() - t0);
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
 
@@ -436,6 +455,7 @@ async function sendToLead(sql, req, res, channel) {
       // SMS stays one-liner: 160-char-friendly across carriers.
       const smsBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${smsCreativeUrl}`;
       const { sid } = await sendSms({ to: row.phone_number, body: smsBody });
+      logSend("twilio-sms", Date.now() - t0);
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
     return res.status(400).json({ error: `unknown channel '${channel}'` });
