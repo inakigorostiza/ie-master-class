@@ -23,7 +23,7 @@
   //    we cover whatever categories the KB declares now and in the future.
   (async () => {
     try {
-      const res = await fetch(window.SHOW_ALL_PROGRAMS ? "/api/programs?all=1" : "/api/programs");
+      const res = await fetch("/api/programs");
       const programs = await res.json();
       if (!Array.isArray(programs)) throw new Error("bad programs payload");
       programSelect.innerHTML = '<option value="">Select…</option>';

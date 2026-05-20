@@ -59,7 +59,6 @@
         body: JSON.stringify({
           messages: [{ role: "user", content: WELCOME_PROMPT }],
           student_email: studentEmail,
-          full_catalog: !!window.SHOW_ALL_PROGRAMS,
         }),
       });
       if (!res.ok || !res.body) return;
@@ -178,7 +177,7 @@
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ messages, student_email: studentEmail, full_catalog: !!window.SHOW_ALL_PROGRAMS }),
+        body: JSON.stringify({ messages, student_email: studentEmail }),
       });
 
       if (!res.ok || !res.body) {
