@@ -1,9 +1,132 @@
+import fs from "node:fs";
+import path from "node:path";
 import { put, del } from "@vercel/blob";
 import { getSql } from "../lib/db.js";
 import { getOperation, extractVideoFromResult, downloadVideoBytes } from "../lib/veo.js";
 import { sendEmail, sendSms, sendWhatsapp } from "../lib/messaging.js";
 
 export const config = { maxDuration: 30 };
+
+// ─── Constants for outbound messaging ─────────────────────────────────────
+// Resolve once at boot so personalized emails/WhatsApps always link back to
+// the live site rather than to localhost during dev.
+const SITE_URL = (process.env.SITE_URL || "https://iechatbot.vercel.app").replace(/\/$/, "");
+const LOGO_URL = `${SITE_URL}/img/ie-logo.svg`;
+const CHAT_URL = `${SITE_URL}/?open=chat`;
+
+// Full slug → { name, url } map. We read programs.jsonl directly (not via
+// lib/kb.js) so the lookup works for legacy students who picked a program
+// outside the current ENABLED_PROGRAM_SLUGS allowlist.
+const PROGRAM_BY_SLUG = (() => {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), "knowledge_base", "programs.jsonl"), "utf8");
+    const map = new Map();
+    for (const line of raw.split("\n")) {
+      if (!line.trim()) continue;
+      try {
+        const p = JSON.parse(line);
+        if (p?.slug) map.set(p.slug, { name: p.name, url: p.url });
+      } catch {}
+    }
+    return map;
+  } catch {
+    return new Map();
+  }
+})();
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function buildPersonalizedEmail({ firstName, creativeUrl, programName, programUrl, careerGoal }) {
+  const safeFirst = escapeHtml(firstName);
+  const safeCreative = escapeHtml(creativeUrl);
+  const safeProgramName = programName ? escapeHtml(programName) : null;
+  const safeProgramUrl = programUrl ? escapeHtml(programUrl) : null;
+  const safeCareer = careerGoal ? escapeHtml(careerGoal) : null;
+
+  const intro = safeProgramName
+    ? `We put together a personalized preview based on your interest in <strong>${safeProgramName}</strong>${safeCareer ? ` and your goal to ${safeCareer.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`
+    : `Great to meet you. We put together a personalized preview based on your profile${safeCareer ? ` and your goal to ${safeCareer.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`;
+
+  const programCta = safeProgramName && safeProgramUrl
+    ? `<a href="${safeProgramUrl}" style="display:inline-block;background:#0B1F3A;color:#ffffff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:600;font-size:15px;margin-right:8px;margin-bottom:8px;">Explore ${safeProgramName}</a>`
+    : "";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your IE Business School preview</title></head>
+<body style="margin:0;padding:0;background:#FAF9F6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#0B1F3A;-webkit-font-smoothing:antialiased;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FAF9F6;">
+  <tr><td align="center" style="padding:24px 16px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #EDEAE4;">
+      <tr><td style="padding:28px 32px 0;">
+        <img src="${LOGO_URL}" alt="IE Business School" width="120" style="display:block;border:0;outline:none;">
+      </td></tr>
+      <tr><td style="padding:20px 32px 8px;">
+        <h1 style="margin:0 0 10px;font-size:26px;font-weight:700;line-height:1.2;color:#0B1F3A;">Hi ${safeFirst},</h1>
+        <p style="margin:0;font-size:16px;line-height:1.55;color:#44474d;">${intro}</p>
+      </td></tr>
+      <tr><td style="padding:18px 32px;">
+        <a href="${safeCreative}" style="display:block;text-decoration:none;">
+          <img src="${safeCreative}" alt="Your personalized IE Business School preview" width="536" style="display:block;width:100%;max-width:536px;border-radius:12px;border:0;outline:none;">
+        </a>
+      </td></tr>
+      <tr><td style="padding:8px 32px 24px;">
+        ${programCta}<a href="${CHAT_URL}" style="display:inline-block;background:#FF5A5F;color:#ffffff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:600;font-size:15px;margin-bottom:8px;">Talk to the AI advisor</a>
+      </td></tr>
+      <tr><td style="padding:20px 32px;border-top:1px solid #EDEAE4;color:#75777e;font-size:13px;line-height:1.55;">
+        <p style="margin:0 0 6px;">If anything in your profile needs an update, just reply to this email.</p>
+        <p style="margin:0;">— The IE Creative Studio team</p>
+      </td></tr>
+    </table>
+    <p style="margin:14px 0 0;font-size:12px;color:#75777e;text-align:center;max-width:560px;">Demo built on Claude, Gemini, Veo, Resend &amp; Twilio. Not affiliated with IE Business School.</p>
+  </td></tr>
+</table>
+</body>
+</html>`;
+}
+
+function buildPersonalizedEmailText({ firstName, creativeUrl, programName, programUrl, careerGoal }) {
+  const lines = [
+    `Hi ${firstName},`,
+    "",
+    programName
+      ? `We put together a personalized preview based on your interest in ${programName}${careerGoal ? ` and your goal to ${careerGoal.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`
+      : `Great to meet you. We put together a personalized preview based on your profile${careerGoal ? ` and your goal to ${careerGoal.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`,
+    "",
+    `  ${creativeUrl}`,
+    "",
+  ];
+  if (programName && programUrl) lines.push(`Explore ${programName}: ${programUrl}`);
+  lines.push(`Talk to the AI advisor: ${CHAT_URL}`);
+  lines.push("");
+  lines.push("If anything in your profile needs an update, just reply to this email.");
+  lines.push("");
+  lines.push("— The IE Creative Studio team");
+  return lines.join("\n");
+}
+
+function buildPersonalizedWhatsapp({ firstName, creativeUrl, programName, programUrl }) {
+  const lines = [`Hi ${firstName},`, ""];
+  lines.push(
+    programName
+      ? `Your personalized IE Business School preview is ready — built around your interest in ${programName}.`
+      : "Your personalized IE Business School preview is ready.",
+  );
+  lines.push("");
+  lines.push(`Preview: ${creativeUrl}`);
+  if (programName && programUrl) lines.push(`Program details: ${programUrl}`);
+  lines.push(`Chat with the AI advisor: ${CHAT_URL}`);
+  lines.push("");
+  lines.push("— IE Creative Studio");
+  return lines.join("\n");
+}
 
 export default async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "POST") {
@@ -239,6 +362,7 @@ async function sendToLead(sql, req, res, channel) {
 
   const [row] = await sql`
     SELECT s.email, s.full_name, s.phone_number,
+      s.top_program_interest, s.career_goal_one_line,
       (SELECT c.url FROM student_creatives c
          WHERE c.student_id = s.id AND c.status = 'completed' AND c.url IS NOT NULL
          ORDER BY c.created_at DESC LIMIT 1) AS latest_creative_url
@@ -252,22 +376,19 @@ async function sendToLead(sql, req, res, channel) {
   if (!creativeUrl) return res.status(400).json({ error: "no creative to share yet — generate a banner or reel first" });
 
   const firstName = (row.full_name || "").trim().split(/\s+/)[0] || "there";
+  const program = row.top_program_interest ? PROGRAM_BY_SLUG.get(row.top_program_interest) : null;
+  const programName = program?.name || null;
+  const programUrl = program?.url || null;
+  const careerGoal = (row.career_goal_one_line || "").trim() || null;
 
   try {
     if (channel === "email") {
-      const subject = "Your IE Business School preview from the Creative Studio";
-      const text = [
-        `Hi ${firstName},`,
-        "",
-        "Great to meet you! We've put together a personalized preview based on your profile and career goal. Take a look:",
-        "",
-        `  ${creativeUrl}`,
-        "",
-        "If anything in your profile needs an update, just reply to this email.",
-        "",
-        "— The IE Creative Studio team",
-      ].join("\n");
-      const { id } = await sendEmail({ to: row.email, subject, body: text });
+      const subject = programName
+        ? `${firstName}, your IE ${programName} preview is ready`
+        : `${firstName}, your IE Business School preview is ready`;
+      const html = buildPersonalizedEmail({ firstName, creativeUrl, programName, programUrl, careerGoal });
+      const text = buildPersonalizedEmailText({ firstName, creativeUrl, programName, programUrl, careerGoal });
+      const { id } = await sendEmail({ to: row.email, subject, body: text, html });
       return res.status(200).json({ ok: true, channel, provider_id: id });
     }
 
@@ -275,14 +396,16 @@ async function sendToLead(sql, req, res, channel) {
       return res.status(400).json({ error: "no phone number on file" });
     }
 
-    const shortBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${creativeUrl}`;
-
-    if (channel === "sms") {
-      const { sid } = await sendSms({ to: row.phone_number, body: shortBody });
+    if (channel === "whatsapp") {
+      const waBody = buildPersonalizedWhatsapp({ firstName, creativeUrl, programName, programUrl });
+      const { sid } = await sendWhatsapp({ to: row.phone_number, body: waBody });
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
-    if (channel === "whatsapp") {
-      const { sid } = await sendWhatsapp({ to: row.phone_number, body: shortBody });
+
+    if (channel === "sms") {
+      // SMS stays one-liner: 160-char-friendly across carriers.
+      const smsBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${creativeUrl}`;
+      const { sid } = await sendSms({ to: row.phone_number, body: smsBody });
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
     return res.status(400).json({ error: `unknown channel '${channel}'` });
