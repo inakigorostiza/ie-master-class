@@ -102,7 +102,7 @@
     });
   });
 
-  fetch("/api/programs")
+  fetch(window.SHOW_ALL_PROGRAMS ? "/api/programs?all=1" : "/api/programs")
     .then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r.json();
