@@ -440,7 +440,10 @@ async function sendToLead(sql, req, res, channel) {
     }
     return res.status(400).json({ error: `unknown channel '${channel}'` });
   } catch (err) {
-    console.error(`[admin] send-${channel} error:`, err);
+    // Surface the error message at the top of the log line so Vercel's log
+    // viewer doesn't truncate it. err.message contains the provider's actual
+    // failure reason (e.g. "Twilio: Channel could not find To address").
+    console.error(`[admin] send-${channel} error: ${err?.message ?? String(err)}`);
     return res.status(502).json({ error: err?.message ?? `send-${channel} failed` });
   }
 }
