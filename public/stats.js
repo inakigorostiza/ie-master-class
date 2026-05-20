@@ -296,20 +296,30 @@
     });
   }
 
-  // Static fallback for the AI-vs-human cost hero when there's no usage
-  // data yet for the selected window. Matches the assumptions documented
-  // in compare.js and the .stats-compare-foot footnote.
+  // ── AI vs Human comparison: model + rendering ─────────────────────────
+  // Human-cost model: €30/h fully loaded × time per task. Splitting it:
+  // €15 per personalized creative (designer ~30 min) + €2.50 per outreach
+  // message (copywriter + CRM coordinator). Matches compare.js + the
+  // .stats-compare-foot footnote.
+  const HUMAN_PER_CREATIVE_EUR = 15;
+  const HUMAN_PER_OUTREACH_EUR = 2.5;
+  const HUMAN_PER_PROSPECT_EUR = HUMAN_PER_CREATIVE_EUR + HUMAN_PER_OUTREACH_EUR; // 17.50
+  // AI outreach cost averages Resend + Twilio (SMS/WhatsApp). Email cost
+  // is logged inline rather than to agent_usage, so this stays an estimate.
+  const AI_PER_OUTREACH_EUR = 0.01;
+
+  // Fallback when the selected window has no usage data yet — keeps the
+  // section meaningful with an illustrative 100-prospect scenario.
   const COMPARE_FALLBACK = {
     eyebrow: "Illustrative scenario · 100 prospects · personalized creative + outreach",
     human: "€1,750",
     ai: "€24",
     delta: "73× cheaper · €1,726 saved per 100 prospects",
+    creativeAi: "€0.20",
+    creativeDelta: "75× cheaper",
+    aiChartValues: [20, 4, 24],
+    humanChartValues: [1500, 250, 1750],
   };
-  // Human-cost model used to scale alongside actual AI spend: €30/h fully
-  // loaded × (30min creative + 5min copy + 2min message) ≈ €17.50 per
-  // personalized creative+outreach pair. Splitting it: €15 creative, €2.50
-  // outreach per message.
-  const HUMAN_PER_CREATIVE_EUR = 15;
 
   const WINDOW_LABEL = {
     "24h": "last 24 hours",
@@ -317,45 +327,145 @@
     "30d": "last 30 days",
     "all": "all time",
   };
+  const WINDOW_DAYS = { "24h": 1, "7d": 7, "30d": 30, "all": null };
 
-  const eurFmt = new Intl.NumberFormat("en-GB", {
+  const eurFmt0 = new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
   });
+  const eurFmt2 = new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
-  function renderCompareHero({ totals, bySurface, windowKey }) {
-    const eyebrowEl = document.getElementById("stats-compare-hero-eyebrow");
-    const humanEl = document.getElementById("stats-compare-hero-human");
-    const aiEl = document.getElementById("stats-compare-hero-ai");
-    const deltaEl = document.getElementById("stats-compare-hero-delta");
-    if (!eyebrowEl || !humanEl || !aiEl || !deltaEl) return;
+  function formatRatio(r) {
+    if (!isFinite(r) || r <= 0) return "—";
+    return r >= 10 ? `${Math.round(r)}×` : `${r.toFixed(1)}×`;
+  }
 
-    // Count creatives generated in the window (banner + reel surfaces).
+  function setCmp(key, value) {
+    const el = section.querySelector(`[data-cmp="${key}"]`);
+    if (el) el.textContent = value;
+  }
+
+  function renderCompare({ totals, bySurface, daily, windowKey }) {
     const surfaceMap = new Map(
-      (bySurface ?? []).map((s) => [s.surface, Number(s.calls) || 0])
+      (bySurface ?? []).map((s) => [
+        s.surface,
+        { calls: Number(s.calls) || 0, cost: Number(s.cost_eur) || 0 },
+      ])
     );
-    const creatives = (surfaceMap.get("banner") ?? 0) + (surfaceMap.get("reel") ?? 0);
-    const aiCost = Number(totals?.cost_eur) || 0;
+    const banner = surfaceMap.get("banner") ?? { calls: 0, cost: 0 };
+    const reel = surfaceMap.get("reel") ?? { calls: 0, cost: 0 };
+    const creatives = banner.calls + reel.calls;
+    const creativeCost = banner.cost + reel.cost;
+    const aiTotal = Number(totals?.cost_eur) || 0;
 
-    if (creatives === 0 || aiCost === 0) {
-      eyebrowEl.textContent = COMPARE_FALLBACK.eyebrow;
-      humanEl.textContent = COMPARE_FALLBACK.human;
-      aiEl.textContent = COMPARE_FALLBACK.ai;
-      deltaEl.textContent = COMPARE_FALLBACK.delta;
+    // ── Hero ──
+    const eyebrowEl = document.getElementById("stats-compare-hero-eyebrow");
+    const heroHuman = document.getElementById("stats-compare-hero-human");
+    const heroAi = document.getElementById("stats-compare-hero-ai");
+    const heroDelta = document.getElementById("stats-compare-hero-delta");
+
+    if (creatives === 0 || aiTotal === 0) {
+      // No data yet — restore the illustrative scenario across the section.
+      if (eyebrowEl) eyebrowEl.textContent = COMPARE_FALLBACK.eyebrow;
+      if (heroHuman) heroHuman.textContent = COMPARE_FALLBACK.human;
+      if (heroAi) heroAi.textContent = COMPARE_FALLBACK.ai;
+      if (heroDelta) heroDelta.textContent = COMPARE_FALLBACK.delta;
+      setCmp("creative-ai", COMPARE_FALLBACK.creativeAi);
+      setCmp("creative-human", eurFmt0.format(HUMAN_PER_CREATIVE_EUR));
+      setCmp("creative-delta", COMPARE_FALLBACK.creativeDelta);
+      setCmp("outreach-ai", eurFmt2.format(AI_PER_OUTREACH_EUR));
+      setCmp("outreach-human", eurFmt2.format(HUMAN_PER_OUTREACH_EUR));
+      setCmp(
+        "outreach-delta",
+        `${formatRatio(HUMAN_PER_OUTREACH_EUR / AI_PER_OUTREACH_EUR)} cheaper`,
+      );
+      setCmp("leads-ai", "Unlimited");
+      setCmp("leads-human", "~30 / day");
+      setCmp("leads-delta", "No cap on volume");
+      window.__ieCompare?.update?.(
+        COMPARE_FALLBACK.aiChartValues,
+        COMPARE_FALLBACK.humanChartValues,
+      );
       return;
     }
 
-    const humanCost = creatives * HUMAN_PER_CREATIVE_EUR;
-    const ratio = humanCost / aiCost;
-    const saved = humanCost - aiCost;
+    // ── Hero (live) ──
+    const humanTotal = creatives * HUMAN_PER_PROSPECT_EUR;
     const label = WINDOW_LABEL[windowKey] ?? "this window";
+    if (eyebrowEl) {
+      eyebrowEl.textContent = `Spend · ${label} · ${creatives} personalized creative${creatives === 1 ? "" : "s"} generated`;
+    }
+    if (heroHuman) heroHuman.textContent = eurFmt0.format(humanTotal);
+    if (heroAi) heroAi.textContent = eurFmt0.format(aiTotal);
+    if (heroDelta) {
+      const ratio = humanTotal / aiTotal;
+      const saved = humanTotal - aiTotal;
+      heroDelta.textContent = `${formatRatio(ratio)} cheaper · ${eurFmt0.format(saved)} saved`;
+    }
 
-    eyebrowEl.textContent = `Spend · ${label} · ${creatives} personalized creative${creatives === 1 ? "" : "s"} generated`;
-    humanEl.textContent = eurFmt.format(humanCost);
-    aiEl.textContent = eurFmt.format(aiCost);
-    const ratioText = ratio >= 10 ? `${Math.round(ratio)}×` : `${ratio.toFixed(1)}×`;
-    deltaEl.textContent = `${ratioText} cheaper · ${eurFmt.format(saved)} saved`;
+    // ── KPI cards (live) ──
+
+    // Cost per personalized creative.
+    const aiPerCreative = creativeCost / creatives;
+    setCmp("creative-ai", eurFmt2.format(aiPerCreative));
+    setCmp("creative-human", eurFmt0.format(HUMAN_PER_CREATIVE_EUR));
+    setCmp("creative-delta", `${formatRatio(HUMAN_PER_CREATIVE_EUR / aiPerCreative)} cheaper`);
+
+    // Cost per outreach message — kept as a constant ratio because the
+    // email/SMS/WhatsApp adapters don't log to agent_usage today.
+    setCmp("outreach-ai", eurFmt2.format(AI_PER_OUTREACH_EUR));
+    setCmp("outreach-human", eurFmt2.format(HUMAN_PER_OUTREACH_EUR));
+    setCmp(
+      "outreach-delta",
+      `${formatRatio(HUMAN_PER_OUTREACH_EUR / AI_PER_OUTREACH_EUR)} cheaper`,
+    );
+
+    // Leads served per day — peak creative-day in the window.
+    const peakDay = (daily ?? []).reduce(
+      (max, d) => Math.max(max, Number(d.calls) || 0),
+      0,
+    );
+    const windowDays = WINDOW_DAYS[windowKey];
+    const avgPerDay = windowDays ? creatives / windowDays : null;
+    if (peakDay > 0) {
+      setCmp("leads-ai", `${peakDay} / peak day`);
+      setCmp("leads-human", "~30 / day");
+      const cmpHuman = Math.max(peakDay, avgPerDay ?? peakDay);
+      setCmp(
+        "leads-delta",
+        cmpHuman > 30 ? `${formatRatio(cmpHuman / 30)} higher throughput` : "No cap on volume",
+      );
+    } else {
+      setCmp("leads-ai", "Unlimited");
+      setCmp("leads-human", "~30 / day");
+      setCmp("leads-delta", "No cap on volume");
+    }
+
+    // ── Chart (live) ──
+    // Outreach AI cost: estimate as creatives × AI_PER_OUTREACH_EUR
+    // (outreach not yet logged with cost). Total AI = real totals.cost_eur.
+    const aiOutreach = creatives * AI_PER_OUTREACH_EUR;
+    const aiCreative = creativeCost || aiPerCreative * creatives;
+    const humanCreative = creatives * HUMAN_PER_CREATIVE_EUR;
+    const humanOutreach = creatives * HUMAN_PER_OUTREACH_EUR;
+    window.__ieCompare?.update?.(
+      [
+        Math.max(0.01, aiCreative),
+        Math.max(0.01, aiOutreach),
+        Math.max(0.01, aiTotal),
+      ],
+      [
+        humanCreative,
+        humanOutreach,
+        humanCreative + humanOutreach,
+      ],
+    );
   }
 
   async function load(win = "30d") {
@@ -374,7 +484,12 @@
       renderLine(json.daily ?? []);
       renderStacked(json.by_model ?? []);
       renderTable(json.by_model ?? []);
-      renderCompareHero({ totals, bySurface: json.by_surface, windowKey: win });
+      renderCompare({
+        totals,
+        bySurface: json.by_surface,
+        daily: json.daily,
+        windowKey: win,
+      });
     } catch (err) {
       console.warn("[stats] load failed:", err);
       emptyEl.hidden = false;

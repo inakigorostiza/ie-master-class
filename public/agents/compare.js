@@ -1,6 +1,8 @@
 // Renders the AI-vs-human cost comparison chart inside #stats.
-// Static, demo-only numbers — see <p.stats-compare-foot> in the markup for
-// the assumptions behind them.
+// Values default to a static demo scenario (100 prospects) so the chart
+// has something to show before stats.js has fetched live data. After that
+// stats.js calls window.__ieCompare.update({ aiValues, humanValues }) on
+// every window change to recompute the bars.
 (() => {
   const canvas = document.getElementById("stats-compare-chart");
   if (!canvas || typeof Chart === "undefined") return;
@@ -11,13 +13,11 @@
   const colorInk2 = css.getPropertyValue("--ie-ink-2").trim() || "#4a4d57";
   const colorLine = css.getPropertyValue("--ie-line").trim() || "#e3e6ed";
 
-  // For 100 prospects:
-  //   designer 30 min/creative + copywriter 5 min/email + 2 min/SMS/WA at €30/h
-  //   ≈ €1,500 creatives + €250 copy = €1,750 labor
-  // AI side combines avg Gemini/Veo + Resend + Twilio per-message rates.
   const labels = ["Creative generation", "Outreach (email + WA + SMS)", "Total funnel"];
-  const aiValues = [20, 4, 24];
-  const humanValues = [1500, 250, 1750];
+
+  // Defaults — illustrative scenario for 100 prospects. Replaced on the
+  // first stats.js load() call with live numbers.
+  let chart = null;
 
   const fmtEur = new Intl.NumberFormat("en-GB", {
     style: "currency",
@@ -25,59 +25,75 @@
     maximumFractionDigits: 0,
   });
 
-  // eslint-disable-next-line no-undef
-  new Chart(canvas, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "AI agents",
-          data: aiValues,
-          backgroundColor: colorSky,
-          borderRadius: 6,
-          maxBarThickness: 56,
-        },
-        {
-          label: "Human team",
-          data: humanValues,
-          backgroundColor: colorNavy,
-          borderRadius: 6,
-          maxBarThickness: 56,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      indexAxis: "x",
-      scales: {
-        y: {
-          beginAtZero: true,
-          type: "logarithmic",
-          grid: { color: colorLine },
-          ticks: {
-            color: colorInk2,
-            callback: (v) => fmtEur.format(v),
+  function build(aiValues, humanValues) {
+    if (chart) {
+      chart.data.datasets[0].data = aiValues;
+      chart.data.datasets[1].data = humanValues;
+      chart.update();
+      return;
+    }
+    // eslint-disable-next-line no-undef
+    chart = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "AI agents",
+            data: aiValues,
+            backgroundColor: colorSky,
+            borderRadius: 6,
+            maxBarThickness: 56,
+          },
+          {
+            label: "Human team",
+            data: humanValues,
+            backgroundColor: colorNavy,
+            borderRadius: 6,
+            maxBarThickness: 56,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: "x",
+        scales: {
+          y: {
+            beginAtZero: true,
+            type: "logarithmic",
+            grid: { color: colorLine },
+            ticks: {
+              color: colorInk2,
+              callback: (v) => fmtEur.format(v),
+            },
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: colorInk2 },
           },
         },
-        x: {
-          grid: { display: false },
-          ticks: { color: colorInk2 },
-        },
-      },
-      plugins: {
-        legend: {
-          position: "top",
-          align: "end",
-          labels: { color: colorInk2, boxWidth: 12, boxHeight: 12 },
-        },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: ${fmtEur.format(ctx.parsed.y)}`,
+        plugins: {
+          legend: {
+            position: "top",
+            align: "end",
+            labels: { color: colorInk2, boxWidth: 12, boxHeight: 12 },
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${fmtEur.format(ctx.parsed.y)}`,
+            },
           },
         },
       },
-    },
-  });
+    });
+  }
+
+  // Initial static render so the chart shows something before the live
+  // /api/stats fetch resolves.
+  build([20, 4, 24], [1500, 250, 1750]);
+
+  window.__ieCompare = {
+    update: (aiValues, humanValues) => build(aiValues, humanValues),
+  };
 })();
