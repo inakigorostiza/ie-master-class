@@ -43,9 +43,10 @@ function escapeHtml(s) {
     .replace(/'/g, "&#39;");
 }
 
-function buildPersonalizedEmail({ firstName, creativeUrl, programName, programUrl, careerGoal }) {
+function buildPersonalizedEmail({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal }) {
   const safeFirst = escapeHtml(firstName);
-  const safeCreative = escapeHtml(creativeUrl);
+  const safeBanner = bannerUrl ? escapeHtml(bannerUrl) : null;
+  const safeReel = reelUrl ? escapeHtml(reelUrl) : null;
   const safeProgramName = programName ? escapeHtml(programName) : null;
   const safeProgramUrl = programUrl ? escapeHtml(programUrl) : null;
   const safeCareer = careerGoal ? escapeHtml(careerGoal) : null;
@@ -53,6 +54,28 @@ function buildPersonalizedEmail({ firstName, creativeUrl, programName, programUr
   const intro = safeProgramName
     ? `We put together a personalized preview based on your interest in <strong>${safeProgramName}</strong>${safeCareer ? ` and your goal to ${safeCareer.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`
     : `Great to meet you. We put together a personalized preview based on your profile${safeCareer ? ` and your goal to ${safeCareer.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`;
+
+  // Banner is an image we can embed inline. Reel is an mp4 — most email
+  // clients refuse to play <video>, so render a poster card with a play
+  // glyph that opens the reel on the live site. If only one exists, show
+  // just that; if both, banner inline + reel as a follow-up card.
+  let mediaBlocks = "";
+  if (safeBanner) {
+    mediaBlocks += `<tr><td style="padding:18px 32px 8px;">
+        <a href="${safeBanner}" style="display:block;text-decoration:none;">
+          <img src="${safeBanner}" alt="Your personalized IE Business School banner" width="536" style="display:block;width:100%;max-width:536px;border-radius:12px;border:0;outline:none;">
+        </a>
+      </td></tr>`;
+  }
+  if (safeReel) {
+    mediaBlocks += `<tr><td style="padding:${safeBanner ? "8" : "18"}px 32px 8px;">
+        <a href="${safeReel}" style="display:block;text-decoration:none;background:#0B1F3A;border-radius:12px;padding:36px 24px;text-align:center;color:#ffffff;">
+          <div style="font-size:36px;line-height:1;margin-bottom:10px;">▶</div>
+          <div style="font-size:15px;font-weight:600;letter-spacing:0.04em;">Watch your personalized 8-second reel</div>
+          <div style="font-size:13px;opacity:0.7;margin-top:4px;">Tap to play in your browser</div>
+        </a>
+      </td></tr>`;
+  }
 
   const programCta = safeProgramName && safeProgramUrl
     ? `<a href="${safeProgramUrl}" style="display:inline-block;background:#0B1F3A;color:#ffffff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:600;font-size:15px;margin-right:8px;margin-bottom:8px;">Explore ${safeProgramName}</a>`
@@ -72,11 +95,7 @@ function buildPersonalizedEmail({ firstName, creativeUrl, programName, programUr
         <h1 style="margin:0 0 10px;font-size:26px;font-weight:700;line-height:1.2;color:#0B1F3A;">Hi ${safeFirst},</h1>
         <p style="margin:0;font-size:16px;line-height:1.55;color:#44474d;">${intro}</p>
       </td></tr>
-      <tr><td style="padding:18px 32px;">
-        <a href="${safeCreative}" style="display:block;text-decoration:none;">
-          <img src="${safeCreative}" alt="Your personalized IE Business School preview" width="536" style="display:block;width:100%;max-width:536px;border-radius:12px;border:0;outline:none;">
-        </a>
-      </td></tr>
+      ${mediaBlocks}
       <tr><td style="padding:8px 32px 24px;">
         ${programCta}<a href="${CHAT_URL}" style="display:inline-block;background:#FF5A5F;color:#ffffff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:600;font-size:15px;margin-bottom:8px;">Talk to the AI advisor</a>
       </td></tr>
@@ -92,7 +111,7 @@ function buildPersonalizedEmail({ firstName, creativeUrl, programName, programUr
 </html>`;
 }
 
-function buildPersonalizedEmailText({ firstName, creativeUrl, programName, programUrl, careerGoal }) {
+function buildPersonalizedEmailText({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal }) {
   const lines = [
     `Hi ${firstName},`,
     "",
@@ -100,9 +119,10 @@ function buildPersonalizedEmailText({ firstName, creativeUrl, programName, progr
       ? `We put together a personalized preview based on your interest in ${programName}${careerGoal ? ` and your goal to ${careerGoal.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`
       : `Great to meet you. We put together a personalized preview based on your profile${careerGoal ? ` and your goal to ${careerGoal.toLowerCase().replace(/\.$/, "")}` : ""}. Take a look:`,
     "",
-    `  ${creativeUrl}`,
-    "",
   ];
+  if (bannerUrl) lines.push(`Banner: ${bannerUrl}`);
+  if (reelUrl) lines.push(`Reel (8-sec): ${reelUrl}`);
+  lines.push("");
   if (programName && programUrl) lines.push(`Explore ${programName}: ${programUrl}`);
   lines.push(`Talk to the AI advisor: ${CHAT_URL}`);
   lines.push("");
@@ -112,7 +132,7 @@ function buildPersonalizedEmailText({ firstName, creativeUrl, programName, progr
   return lines.join("\n");
 }
 
-function buildPersonalizedWhatsapp({ firstName, creativeUrl, programName, programUrl }) {
+function buildPersonalizedWhatsapp({ firstName, bannerUrl, reelUrl, programName, programUrl }) {
   const lines = [`Hi ${firstName},`, ""];
   lines.push(
     programName
@@ -120,7 +140,8 @@ function buildPersonalizedWhatsapp({ firstName, creativeUrl, programName, progra
       : "Your personalized IE Business School preview is ready.",
   );
   lines.push("");
-  lines.push(`Preview: ${creativeUrl}`);
+  if (bannerUrl) lines.push(`Banner: ${bannerUrl}`);
+  if (reelUrl) lines.push(`Reel (8-sec): ${reelUrl}`);
   if (programName && programUrl) lines.push(`Program details: ${programUrl}`);
   lines.push(`Chat with the AI advisor: ${CHAT_URL}`);
   lines.push("");
@@ -364,16 +385,25 @@ async function sendToLead(sql, req, res, channel) {
     SELECT s.email, s.full_name, s.phone_number,
       s.top_program_interest, s.career_goal_one_line,
       (SELECT c.url FROM student_creatives c
-         WHERE c.student_id = s.id AND c.status = 'completed' AND c.url IS NOT NULL
-         ORDER BY c.created_at DESC LIMIT 1) AS latest_creative_url
+         WHERE c.student_id = s.id AND c.status = 'completed' AND c.url IS NOT NULL AND c.format = 'banner'
+         ORDER BY c.created_at DESC LIMIT 1) AS latest_banner_url,
+      (SELECT c.url FROM student_creatives c
+         WHERE c.student_id = s.id AND c.status = 'completed' AND c.url IS NOT NULL AND c.format = 'reel'
+         ORDER BY c.created_at DESC LIMIT 1) AS latest_reel_url
     FROM students s
     WHERE s.email = ${email}
     LIMIT 1
   `;
   if (!row) return res.status(404).json({ error: "student not found" });
 
-  const creativeUrl = row.latest_creative_url;
-  if (!creativeUrl) return res.status(400).json({ error: "no creative to share yet — generate a banner or reel first" });
+  const bannerUrl = row.latest_banner_url;
+  const reelUrl = row.latest_reel_url;
+  if (!bannerUrl && !reelUrl) {
+    return res.status(400).json({ error: "no creative to share yet — generate a banner or reel first" });
+  }
+  // SMS still wants a single URL — prefer the banner (image preview shows
+  // a richer card when pasted into chat clients), fall back to the reel.
+  const smsCreativeUrl = bannerUrl || reelUrl;
 
   const firstName = (row.full_name || "").trim().split(/\s+/)[0] || "there";
   const program = row.top_program_interest ? PROGRAM_BY_SLUG.get(row.top_program_interest) : null;
@@ -386,8 +416,8 @@ async function sendToLead(sql, req, res, channel) {
       const subject = programName
         ? `${firstName}, your IE ${programName} preview is ready`
         : `${firstName}, your IE Business School preview is ready`;
-      const html = buildPersonalizedEmail({ firstName, creativeUrl, programName, programUrl, careerGoal });
-      const text = buildPersonalizedEmailText({ firstName, creativeUrl, programName, programUrl, careerGoal });
+      const html = buildPersonalizedEmail({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal });
+      const text = buildPersonalizedEmailText({ firstName, bannerUrl, reelUrl, programName, programUrl, careerGoal });
       const { id } = await sendEmail({ to: row.email, subject, body: text, html });
       return res.status(200).json({ ok: true, channel, provider_id: id });
     }
@@ -397,14 +427,14 @@ async function sendToLead(sql, req, res, channel) {
     }
 
     if (channel === "whatsapp") {
-      const waBody = buildPersonalizedWhatsapp({ firstName, creativeUrl, programName, programUrl });
+      const waBody = buildPersonalizedWhatsapp({ firstName, bannerUrl, reelUrl, programName, programUrl });
       const { sid } = await sendWhatsapp({ to: row.phone_number, body: waBody });
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
 
     if (channel === "sms") {
       // SMS stays one-liner: 160-char-friendly across carriers.
-      const smsBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${creativeUrl}`;
+      const smsBody = `Hi ${firstName}! Your personalized IE Business School preview is ready: ${smsCreativeUrl}`;
       const { sid } = await sendSms({ to: row.phone_number, body: smsBody });
       return res.status(200).json({ ok: true, channel, provider_id: sid });
     }
